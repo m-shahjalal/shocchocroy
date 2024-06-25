@@ -1,6 +1,6 @@
 import Header from "@/components/sidebar/header";
 import SideBar from "@/components/sidebar/sidebar";
-import { me } from "@/utils/auth.action";
+import NProgressProviders from "@/providers/progressbar-provider";
 import { cn } from "@/utils/cn";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
@@ -18,15 +18,16 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const user = await me();
   return (
     <html lang="en">
       <body className={cn(inter.className, "h-screen")}>
-        <Header user={user} />
-        <main className="flex gap-4 translate-y-16 h-full">
-          <SideBar />
-          <div className="flex-1 overflow-x-hidden">{children}</div>
-        </main>
+        <NProgressProviders>
+          <Header />
+          <main className="flex gap-4 translate-y-16 h-full">
+            <SideBar />
+            <div className="flex-1 overflow-x-hidden">{children}</div>
+          </main>
+        </NProgressProviders>
       </body>
     </html>
   );

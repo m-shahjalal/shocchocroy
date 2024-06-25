@@ -1,7 +1,6 @@
 "use client";
 
 import { Input } from "@/components/ui/input";
-import { User } from "@supabase/supabase-js";
 import {
   LogOut,
   Search,
@@ -12,8 +11,10 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 
+import { PAGES } from "@/config/pages";
+import useAuth from "@/hooks/use-auth";
+import { logout } from "@/utils/handle-auth";
 import { DropdownMenuItem } from "@radix-ui/react-dropdown-menu";
-import { useState } from "react";
 import { Button } from "../ui/button";
 import {
   DropdownMenu,
@@ -23,11 +24,7 @@ import {
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 
-export default function Header({ user }: { user: User }) {
-  const [isOpen, setIsOpen] = useState(
-    localStorage.getItem("sidebar") === "open"
-  );
-
+export default function Header() {
   return (
     <header className="shadow-sm fixed z-10 left-0 right-0 bg-white h-16">
       <div className="container h-full flex items-center justify-between">
@@ -47,7 +44,7 @@ export default function Header({ user }: { user: User }) {
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-500" />
         </div>
         <Nav />
-        <UserDropdown user={user} />
+        <UserDropdown />
 
         <Link
           href="#"
@@ -92,51 +89,86 @@ const Nav = () => (
   </nav>
 );
 
-const UserDropdown = ({ user }: { user: User }) => (
-  <DropdownMenu>
-    <DropdownMenuTrigger asChild>
-      <Button
-        variant="outline"
-        className=" ml-4 h-10 w-10 bg-gray-800 text-white rounded-full"
-      >
-        {user?.user_metadata.name?.[0] || user?.email?.[0] || "SP"}
-      </Button>
-    </DropdownMenuTrigger>
-    <DropdownMenuContent className="w-60">
-      <DropdownMenuLabel>Management</DropdownMenuLabel>
-      <DropdownMenuSeparator />
+const UserDropdown = () => {
+  const user = useAuth();
 
-      <DropdownMenuItem>
-        <Link
-          className="p-2 flex gap-2 justify-start items-center h-full"
-          href={"#"}
-        >
-          <UserIcon size={20} />
-          Profile
-        </Link>
-      </DropdownMenuItem>
+  const handleLogout = async () => {
+    const data = await logout();
+    console.log("data", data);
+  };
 
-      <DropdownMenuItem>
-        <Link
-          className="p-2 flex gap-2 justify-start items-center h-full"
-          href={"#"}
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button
+          variant="outline"
+          className=" ml-4 h-10 w-10 bg-gray-800 text-white rounded-full"
         >
-          <ShoppingBag size={20} />
-          My orders
-        </Link>
-      </DropdownMenuItem>
-      <DropdownMenuItem>
-        <Link
-          className="p-2 flex gap-2 justify-start items-center h-full"
-          href={"#"}
-        >
-          <Settings size={20} />
-          Settings
-        </Link>
-      </DropdownMenuItem>
-      <DropdownMenuItem className="p-2 flex gap-2 justify-start items-center h-full">
-        <LogOut size={20} /> Log out
-      </DropdownMenuItem>
-    </DropdownMenuContent>
-  </DropdownMenu>
-);
+          {user?.user_metadata.name?.[0] || user?.email?.[0] || "SP"}
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent className="w-60">
+        <DropdownMenuLabel>Management</DropdownMenuLabel>
+        <DropdownMenuSeparator />
+
+        {user?.id ? (
+          <>
+            <DropdownMenuItem>
+              <Link
+                className="p-2 flex gap-2 justify-start items-center h-full"
+                href={"#"}
+              >
+                <UserIcon size={20} />
+                Profile
+              </Link>
+            </DropdownMenuItem>
+
+            <DropdownMenuItem>
+              <Link
+                className="p-2 flex gap-2 justify-start items-center h-full"
+                href={"#"}
+              >
+                <ShoppingBag size={20} />
+                My orders
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+              <Link
+                className="p-2 flex gap-2 justify-start items-center h-full"
+                href={"#"}
+              >
+                <Settings size={20} />
+                Settings
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={handleLogout}
+              className="p-2 flex gap-2 justify-start items-center h-full"
+            >
+              <LogOut size={20} /> Log out
+            </DropdownMenuItem>
+          </>
+        ) : (
+          <>
+            <DropdownMenuItem>
+              <Link
+                className="p-2 flex gap-2 justify-start items-center h-full"
+                href={PAGES.LOGIN}
+              >
+                Login
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+              <Link
+                className="p-2 flex gap-2 justify-start items-center h-full"
+                href={PAGES.REGISTER}
+              >
+                Register
+              </Link>
+            </DropdownMenuItem>
+          </>
+        )}
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+};
