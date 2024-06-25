@@ -1,15 +1,17 @@
 "use client";
-import { cn } from "@/lib/cn";
-import { signUpWithEmail } from "@/server/action/auth";
+import google from "@/assets/icons/google.png";
+import { PAGES } from "@/config/pages";
+import { cn } from "@/utils/cn";
 import {
   LoginValuesType,
   loginFormSchema,
 } from "@/validator/login-form-schema";
 import { zodResolver } from "@hookform/resolvers/zod";
+import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useTransition } from "react";
-import { Controller, Form, useForm } from "react-hook-form";
-import { FcGoogle } from "react-icons/fc";
+import { Controller, useForm } from "react-hook-form";
 import { Button } from "../ui/button";
 import {
   Card,
@@ -20,23 +22,21 @@ import {
   CardTitle,
 } from "../ui/card";
 import { Input } from "../ui/input";
+import { signup } from "@/utils/auth.action";
 
 export const Register = () => {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const defaultValues: LoginValuesType = { email: "", password: "" };
 
-  const methods = useForm<LoginValuesType>({
+  const { handleSubmit, control } = useForm<LoginValuesType>({
     resolver: zodResolver(loginFormSchema),
     defaultValues,
     reValidateMode: "onChange",
   });
 
-  const { handleSubmit } = methods;
   const handleLogin = (values: LoginValuesType) => {
-    startTransition(async () => {
-      const result = await signUpWithEmail(values);
-    });
+    startTransition(async () => await signup(values));
   };
 
   return (
@@ -49,14 +49,13 @@ export const Register = () => {
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          <Form<LoginValuesType>
-            {...methods}
-            onSubmit={handleSubmit(handleLogin) as any}
+          <form
+            onSubmit={handleSubmit(handleLogin)}
             className="flex flex-col gap-2"
           >
             <div className="space-y-2">
               <Controller
-                control={methods.control}
+                control={control}
                 name="email"
                 render={({
                   field: { name, value, onChange },
@@ -76,7 +75,7 @@ export const Register = () => {
             </div>
             <div className="space-y-2">
               <Controller
-                control={methods.control}
+                control={control}
                 name="password"
                 render={({
                   field: { name, value, onChange },
@@ -95,14 +94,23 @@ export const Register = () => {
               />
             </div>
             <Button isLoading={isPending} type="submit" className="w-full">
-              Sign in
+              Sign Up
             </Button>
-          </Form>
+            <Link className="text-xs text-right w-full" href={PAGES.LOGIN}>
+              Already Registered?
+            </Link>
+          </form>
           <div className="border-b py-2" />
         </CardContent>
         <CardFooter>
           <Button className="w-full" variant="outline">
-            <FcGoogle />
+            <Image
+              src={google.src}
+              className="space-x-2"
+              alt="google"
+              width={20}
+              height={20}
+            />
             Sign in with Google
           </Button>
         </CardFooter>
