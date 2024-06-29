@@ -1,13 +1,13 @@
-'use client'
+"use client";
+
 import { Button } from "@/components/ui/button";
 import { PAGES } from "@/config/pages";
-import { HeartCrack, Home, RefreshCcw } from "lucide-react";
+import { ChevronLeft, HeartCrack, Home } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import React from "react";
 
 const NotFound = () => {
-    const router = useRouter()
+  const router = useRouter();
   return (
     <div className="flex h-screen w-screen overflow-hidden justify-center items-center flex-col">
       <HeartCrack className="text-red-700" size={100} />
@@ -16,16 +16,19 @@ const NotFound = () => {
         We will word on this soo, please try again later..
       </p>
       <div className="flex gap-3 mt-4">
+        <Button
+          onClick={() => router.back()}
+          className="flex gap-3 justify-center items-center"
+        >
+          <ChevronLeft size={20} />
+          Go Back
+        </Button>
         <Link href={PAGES.ROOT}>
           <Button className="flex gap-3 justify-center items-center">
             <Home size={20} />
-            Back to home
+            To Home
           </Button>
         </Link>
-        <Button onClick={() => router.refresh()} className="flex gap-3 justify-center items-center">
-          <RefreshCcw size={20} />
-          Refresh
-        </Button>
       </div>
     </div>
   );
