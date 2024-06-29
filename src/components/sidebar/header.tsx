@@ -1,13 +1,17 @@
 "use client";
 
 import { Input } from "@/components/ui/input";
+import { useAtom } from "jotai";
+
 import {
   LogOut,
+  Menu,
   Search,
   Settings,
   ShoppingBag,
   ShoppingBasket,
   User as UserIcon,
+  X,
 } from "lucide-react";
 import Link from "next/link";
 
@@ -23,17 +27,32 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
+import { sidebarAtom } from "@/utils/store";
 
 export default function Header() {
+  const [sidebarState, toggleSidebar] = useAtom(sidebarAtom);
+
+  const handleSidebar = () => {
+    toggleSidebar({
+      ...sidebarState,
+      isSidebarOpen: !sidebarState.isSidebarOpen,
+    });
+  };
+
   return (
     <header className="shadow-sm fixed z-10 left-0 right-0 bg-white h-16">
-      <div className="container h-full flex items-center justify-between">
-        <div className="flex items-center flex-1 justify-between">
-          <span className="flex items-center ml-6 lg:ml-0">
-            <Link href="/" className=" font-bold text-xl">
-              স্বচ্ছক্রয়
-            </Link>
+      <div className="container h-full flex items-center gap-4 justify-between">
+        <div className="flex items-center flex-1 gap-2 justify-start">
+          <span className="lg:hidden z-30 cursor-pointer -top-[42px] left-7">
+            {sidebarState.isSidebarOpen ? (
+              <X onClick={handleSidebar} size={24} />
+            ) : (
+              <Menu onClick={handleSidebar} size={24} />
+            )}
           </span>
+          <Link href="/" className="text-blue-500 font-bold text-xl">
+            স্বচ্ছক্রয়
+          </Link>
         </div>
         <div className="relative hidden sm:block w-full max-w-80">
           <Input
@@ -46,13 +65,9 @@ export default function Header() {
         <Nav />
         <UserDropdown />
 
-        <Link
-          href="#"
-          className="relative block mb-2 lg:mb-0 order-last w-7 ml-4 top-[2px] lg:top-0"
-          prefetch={false}
-        >
-          <ShoppingBasket className="h-10 w-10 p-2 bg-gray-800 text-gray-200 rounded-full" />
-          <span className="absolute top-0 right-0 -mt-2 -mr-4 bg-green-500 text-gray-100 rounded-full px-2 py-1 text-xs font-bold">
+        <Link className="relative" href="#" prefetch={false}>
+          <ShoppingBasket className="h-10 w-10 p-2 bg-blue-500 text-gray-200 rounded-full" />
+          <span className="absolute top-0 right-0 -mt-2 -mr-2 bg-green-500 text-gray-100 rounded-full px-2 py-1 text-xs font-bold">
             3
           </span>
         </Link>
@@ -63,7 +78,7 @@ export default function Header() {
 
 const Nav = () => (
   <nav
-    className={`hidden mt-4 lg:mt-0 lg:flex lg:items-center lg:space-x-6 flex-col lg:flex-row ml-4`}
+    className={`hidden mt-4 lg:mt-0 lg:flex lg:items-center lg:space-x-6 flex-col lg:flex-row`}
   >
     <Link
       href="#"
@@ -102,7 +117,7 @@ const UserDropdown = () => {
       <DropdownMenuTrigger asChild>
         <Button
           variant="outline"
-          className=" ml-4 h-10 w-10 bg-gray-800 text-white rounded-full"
+          className="h-10 w-10 bg-blue-500 text-white rounded-full"
         >
           {user?.user_metadata.name?.[0] || user?.email?.[0] || "SP"}
         </Button>
