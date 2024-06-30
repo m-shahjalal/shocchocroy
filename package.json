@@ -14,9 +14,9 @@
     "db:generate": "drizzle-kit generate",
     "db:drop": "drizzle-kit drop",
     "db:check": "drizzle-kit check",
-    "db:seed": "node -r @swc-node/register ./src/db/seed.ts",
-    "db:clean": "node -r @swc-node/register ./src/db/clean.ts",
-    "db:migrate": "node -r @swc-node/register ./src/db/migrate.ts",
+    "db:seed": "node -r @swc-node/register ./src/supabase/db/seed.ts",
+    "db:clean": "node -r @swc-node/register ./src/supabase/db/clean.ts",
+    "db:migrate": "node -r @swc-node/register ./src/supabase/db/migrate.ts",
     "format": "prettier --write ."
   },
   "dependencies": {
@@ -69,6 +69,7 @@
   },
   "devDependencies": {
     "@ianvs/prettier-plugin-sort-imports": "^4.3.0",
+    "@swc-node/register": "^1.10.0",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",

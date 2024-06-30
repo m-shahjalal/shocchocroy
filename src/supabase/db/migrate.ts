@@ -1,12 +1,12 @@
+import 'dotenv/config';
 import { migrate } from 'drizzle-orm/node-postgres/migrator';
-
 import { db } from './index';
 
 async function main() {
   // This will run migrations on the database, skipping the ones already applied
   console.info('🚀    MIGRATION STARTED');
   await migrate(db, {
-    migrationsFolder: 'src/db/migrations',
+    migrationsFolder: 'src/supabase/db/migrations',
     migrationsTable: 'drizzle_migrations',
   });
   console.info('✅    MIGRATION COMPLETED');

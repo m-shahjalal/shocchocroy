@@ -8,7 +8,7 @@ if (!process.env.DATABASE_URL) {
 
 export default defineConfig({
   schema: "src/supabase/db/schema/*",
-  out: "./src/supabase/migrations",
+  out: "./src/supabase/db/migrations",
   dialect: "postgresql",
   dbCredentials: {
     url: env.NEXT_PUBLIC_SUPABASE_URL,
