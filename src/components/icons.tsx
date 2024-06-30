@@ -28,7 +28,7 @@ import {
   User,
   User2Icon,
   UserX2Icon,
-  X
+  X,
 } from 'lucide-react';
 
 export type Icon = LucideIcon;
@@ -78,5 +78,5 @@ export const Icons = {
     </svg>
   ),
   twitter: Twitter,
-  check: Check
+  check: Check,
 };

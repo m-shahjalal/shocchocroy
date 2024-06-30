@@ -88,10 +88,9 @@
   }
 }
 
-
 /* logo */
 .logo {
-  font-family: "Hind Siliguri", sans-serif;
+  font-family: 'Hind Siliguri', sans-serif;
   font-weight: 700;
   font-style: 50px;
   @apply text-gray-800;

@@ -1,23 +1,31 @@
 'use client';
+
+import React from 'react';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import {
+  DoubleArrowLeftIcon,
+  DoubleArrowRightIcon,
+} from '@radix-ui/react-icons';
 import {
   ColumnDef,
-  PaginationState,
   flexRender,
   getCoreRowModel,
   getFilteredRowModel,
   getPaginationRowModel,
-  useReactTable
+  PaginationState,
+  useReactTable,
 } from '@tanstack/react-table';
-import React from 'react';
+import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue
+  SelectValue,
 } from '@/components/ui/select';
 import {
   Table,
@@ -25,15 +33,8 @@ import {
   TableCell,
   TableHead,
   TableHeader,
-  TableRow
+  TableRow,
 } from '@/components/ui/table';
-import {
-  DoubleArrowLeftIcon,
-  DoubleArrowRightIcon
-} from '@radix-ui/react-icons';
-import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -55,7 +56,7 @@ export function EmployeeTable<TData, TValue>({
   searchKey,
   totalUsers,
   pageCount,
-  pageSizeOptions = [10, 20, 30, 40, 50]
+  pageSizeOptions = [10, 20, 30, 40, 50],
 }: DataTableProps<TData, TValue>) {
   const router = useRouter();
   const pathname = usePathname();
@@ -94,17 +95,17 @@ export function EmployeeTable<TData, TValue>({
   const [{ pageIndex, pageSize }, setPagination] =
     React.useState<PaginationState>({
       pageIndex: fallbackPage - 1,
-      pageSize: fallbackPerPage
+      pageSize: fallbackPerPage,
     });
 
   React.useEffect(() => {
     router.push(
       `${pathname}?${createQueryString({
         page: pageIndex + 1,
-        limit: pageSize
+        limit: pageSize,
       })}`,
       {
-        scroll: false
+        scroll: false,
       }
     );
 
@@ -118,12 +119,12 @@ export function EmployeeTable<TData, TValue>({
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     state: {
-      pagination: { pageIndex, pageSize }
+      pagination: { pageIndex, pageSize },
     },
     onPaginationChange: setPagination,
     getPaginationRowModel: getPaginationRowModel(),
     manualPagination: true,
-    manualFiltering: true
+    manualFiltering: true,
   });
 
   const searchValue = table.getColumn(searchKey)?.getFilterValue() as string;
@@ -161,10 +162,10 @@ export function EmployeeTable<TData, TValue>({
         `${pathname}?${createQueryString({
           page: null,
           limit: null,
-          search: searchValue
+          search: searchValue,
         })}`,
         {
-          scroll: false
+          scroll: false,
         }
       );
     }
@@ -173,10 +174,10 @@ export function EmployeeTable<TData, TValue>({
         `${pathname}?${createQueryString({
           page: null,
           limit: null,
-          search: null
+          search: null,
         })}`,
         {
-          scroll: false
+          scroll: false,
         }
       );
     }

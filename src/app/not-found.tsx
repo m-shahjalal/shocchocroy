@@ -1,30 +1,31 @@
-"use client";
+'use client';
 
-import { Button } from "@/components/ui/button";
-import { PAGES } from "@/config/pages";
-import { ChevronLeft, HeartCrack, Home } from "lucide-react";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { ChevronLeft, HeartCrack, Home } from 'lucide-react';
+
+import { PAGES } from '@/config/pages';
+import { Button } from '@/components/ui/button';
 
 const NotFound = () => {
   const router = useRouter();
   return (
-    <div className="flex h-screen w-screen overflow-hidden justify-center items-center flex-col">
+    <div className="flex h-screen w-screen flex-col items-center justify-center overflow-hidden">
       <HeartCrack className="text-red-700" size={100} />
-      <h1 className="text-gray-600 text-3xl">Oops! Resource does not exist.</h1>
-      <p className="text-gray-400 my-2">
+      <h1 className="text-3xl text-gray-600">Oops! Resource does not exist.</h1>
+      <p className="my-2 text-gray-400">
         We will word on this soo, please try again later..
       </p>
-      <div className="flex gap-3 mt-4">
+      <div className="mt-4 flex gap-3">
         <Button
           onClick={() => router.back()}
-          className="flex gap-3 justify-center items-center"
+          className="flex items-center justify-center gap-3"
         >
           <ChevronLeft size={20} />
           Go Back
         </Button>
         <Link href={PAGES.ROOT}>
-          <Button className="flex gap-3 justify-center items-center">
+          <Button className="flex items-center justify-center gap-3">
             <Home size={20} />
             To Home
           </Button>

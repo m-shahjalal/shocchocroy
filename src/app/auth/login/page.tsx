@@ -1,7 +1,8 @@
-import { Login } from "@/components/auth/Login";
-import { PAGES } from "@/config/pages";
-import { isAuthenticated } from "@/utils/auth.action";
-import { redirect } from "next/navigation";
+import { redirect } from 'next/navigation';
+import { isAuthenticated } from '@/utils/auth.action';
+
+import { PAGES } from '@/config/pages';
+import { Login } from '@/components/auth/Login';
 
 const Page = async () => {
   const isAuthenticatedUser = await isAuthenticated();

@@ -1,5 +1,4 @@
 import * as React from 'react';
-
 import { cn } from '@/utils/cn';
 
 const Table = React.forwardRef<
@@ -113,5 +112,5 @@ export {
   TableHead,
   TableRow,
   TableCell,
-  TableCaption
+  TableCaption,
 };

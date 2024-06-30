@@ -1,12 +1,12 @@
-"use server";
+'use server';
 
-import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
+import { revalidatePath } from 'next/cache';
+import { redirect } from 'next/navigation';
+import { createClient } from '@/supabase/server';
+import { LoginValuesType } from '@/validator/login-form-schema';
+import { AuthError, User } from '@supabase/supabase-js';
 
-import { createClient } from "@/supabase/server";
-import { LoginValuesType } from "@/validator/login-form-schema";
-import { PAGES } from "@/config/pages";
-import { AuthError, User } from "@supabase/supabase-js";
+import { PAGES } from '@/config/pages';
 
 export const getAuthenticatedUser = async (): Promise<User | null> => {
   const supabase = createClient();
@@ -19,7 +19,7 @@ export async function login(data: LoginValuesType) {
   const { error } = await supabase.auth.signInWithPassword(data);
 
   if (error) redirect(PAGES.ERROR);
-  revalidatePath(PAGES.ROOT, "layout");
+  revalidatePath(PAGES.ROOT, 'layout');
   redirect(PAGES.ROOT);
 }
 
@@ -28,7 +28,7 @@ export async function signup(data: LoginValuesType) {
   const { error } = await supabase.auth.signUp(data);
 
   if (error) redirect(PAGES.ERROR);
-  revalidatePath(PAGES.ROOT, "layout");
+  revalidatePath(PAGES.ROOT, 'layout');
   redirect(PAGES.ROOT);
 }
 
@@ -37,7 +37,7 @@ export const logout = async () => {
   const { error } = await supabase.auth.signOut();
 
   if (error) redirect(PAGES.ERROR);
-  revalidatePath(PAGES.ROOT, "layout");
+  revalidatePath(PAGES.ROOT, 'layout');
   redirect(PAGES.LOGIN);
 };
 

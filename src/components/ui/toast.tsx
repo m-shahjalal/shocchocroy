@@ -1,9 +1,8 @@
 import * as React from 'react';
+import { cn } from '@/utils/cn';
 import { Cross2Icon } from '@radix-ui/react-icons';
 import * as ToastPrimitives from '@radix-ui/react-toast';
 import { cva, type VariantProps } from 'class-variance-authority';
-
-import { cn } from '@/utils/cn';
 
 const ToastProvider = ToastPrimitives.Provider;
 
@@ -29,12 +28,12 @@ const toastVariants = cva(
       variant: {
         default: 'border bg-background text-foreground',
         destructive:
-          'destructive group border-destructive bg-destructive text-destructive-foreground'
-      }
+          'destructive group border-destructive bg-destructive text-destructive-foreground',
+      },
     },
     defaultVariants: {
-      variant: 'default'
-    }
+      variant: 'default',
+    },
   }
 );
 
@@ -123,5 +122,5 @@ export {
   ToastTitle,
   ToastDescription,
   ToastClose,
-  ToastAction
+  ToastAction,
 };

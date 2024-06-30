@@ -1,13 +1,14 @@
-import BreadCrumb from '@/components/breadcrumb';
-import { columns } from '@/components/tables/employee-tables/columns';
-import { EmployeeTable } from '@/components/tables/employee-tables/employee-table';
+import Link from 'next/link';
+import { cn } from '@/utils/cn';
+import { Plus } from 'lucide-react';
+
+import { Employee } from '@/config/data';
 import { buttonVariants } from '@/components/ui/button';
 import { Heading } from '@/components/ui/heading';
 import { Separator } from '@/components/ui/separator';
-import { Employee } from '@/config/data';
-import { cn } from '@/utils/cn';
-import { Plus } from 'lucide-react';
-import Link from 'next/link';
+import BreadCrumb from '@/components/breadcrumb';
+import { columns } from '@/components/tables/employee-tables/columns';
+import { EmployeeTable } from '@/components/tables/employee-tables/employee-table';
 
 const breadcrumbItems = [{ title: 'Employee', link: '/dashboard/employee' }];
 
@@ -33,7 +34,7 @@ export default async function page({ searchParams }: paramsProps) {
   const employee: Employee[] = employeeRes.users;
   return (
     <>
-      <div className="flex-1 space-y-4  p-4 pt-6 md:p-8">
+      <div className="flex-1 space-y-4 p-4 pt-6 md:p-8">
         <BreadCrumb items={breadcrumbItems} />
 
         <div className="flex items-start justify-between">

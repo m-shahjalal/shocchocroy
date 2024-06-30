@@ -1,7 +1,8 @@
-"use client";
-import { me } from "@/utils/handle-auth";
-import { User } from "@supabase/supabase-js";
-import { useEffect, useState } from "react";
+'use client';
+
+import { useEffect, useState } from 'react';
+import { me } from '@/utils/handle-auth';
+import { User } from '@supabase/supabase-js';
 
 const useAuth = () => {
   const [user, setUser] = useState<User | null>(null);

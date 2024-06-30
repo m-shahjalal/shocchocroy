@@ -1,10 +1,9 @@
 'use client';
 
 import * as React from 'react';
+import { cn } from '@/utils/cn';
 import { CaretSortIcon, CheckIcon } from '@radix-ui/react-icons';
 import * as SelectPrimitive from '@radix-ui/react-select';
-
-import { cn } from '@/utils/cn';
 
 const Select = SelectPrimitive.Root;
 
@@ -116,5 +115,5 @@ export {
   SelectContent,
   SelectLabel,
   SelectItem,
-  SelectSeparator
+  SelectSeparator,
 };

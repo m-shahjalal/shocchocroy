@@ -1,19 +1,22 @@
-"use client";
-import google from "@/assets/icons/google.png";
-import { PAGES } from "@/config/pages";
-import { login } from "@/utils/auth.action";
-import { cn } from "@/utils/cn";
+'use client';
+
+import { useTransition } from 'react';
+import Image from 'next/image';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import google from '@/assets/icons/google.png';
+import { login } from '@/utils/auth.action';
+import { cn } from '@/utils/cn';
 import {
-  LoginValuesType,
   loginFormSchema,
-} from "@/validator/login-form-schema";
-import { zodResolver } from "@hookform/resolvers/zod";
-import Image from "next/image";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useTransition } from "react";
-import { Controller, useForm } from "react-hook-form";
-import { Button } from "../ui/button";
+  LoginValuesType,
+} from '@/validator/login-form-schema';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Controller, useForm } from 'react-hook-form';
+
+import { PAGES } from '@/config/pages';
+
+import { Button } from '../ui/button';
 import {
   Card,
   CardContent,
@@ -21,18 +24,18 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "../ui/card";
-import { Input } from "../ui/input";
+} from '../ui/card';
+import { Input } from '../ui/input';
 
 export const Login = () => {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
-  const defaultValues: LoginValuesType = { email: "", password: "" };
+  const defaultValues: LoginValuesType = { email: '', password: '' };
 
   const { control, handleSubmit } = useForm<LoginValuesType>({
     resolver: zodResolver(loginFormSchema),
     defaultValues,
-    reValidateMode: "onChange",
+    reValidateMode: 'onChange',
   });
 
   const handleLogin = (values: LoginValuesType) => {
@@ -40,8 +43,8 @@ export const Login = () => {
   };
 
   return (
-    <div className="bg-gray-300 flex justify-center items-center p-4 h-full">
-      <Card className="w-full max-w-md py-6 px-3">
+    <div className="flex h-full items-center justify-center bg-gray-300 p-4">
+      <Card className="w-full max-w-md px-3 py-6">
         <CardHeader>
           <CardTitle className="text-2xl">Login</CardTitle>
           <CardDescription>
@@ -68,7 +71,7 @@ export const Login = () => {
                     placeholder="m@example.com"
                     required
                     type="email"
-                    className={cn(errors.email && "border-red-500")}
+                    className={cn(errors.email && 'border-red-500')}
                   />
                 )}
               />
@@ -88,7 +91,7 @@ export const Login = () => {
                     placeholder="******"
                     required
                     type="password"
-                    className={cn(errors.password && "border-red-500")}
+                    className={cn(errors.password && 'border-red-500')}
                   />
                 )}
               />
@@ -97,7 +100,7 @@ export const Login = () => {
             <Button isLoading={isPending} type="submit" className="w-full">
               Sign in
             </Button>
-            <Link className="text-xs text-right w-full" href={PAGES.REGISTER}>
+            <Link className="w-full text-right text-xs" href={PAGES.REGISTER}>
               Don&apos;t have account?
             </Link>
           </form>

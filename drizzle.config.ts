@@ -1,5 +1,5 @@
-import "dotenv/config";
 import { defineConfig } from "drizzle-kit";
+
 import { env } from "@/env.mjs";
 
 if (!process.env.DATABASE_URL) {
@@ -7,7 +7,7 @@ if (!process.env.DATABASE_URL) {
 }
 
 export default defineConfig({
-  schema: "./src/supabase/schema/**/**.ts",
+  schema: "src/supabase/db/schema/*",
   out: "./src/supabase/migrations",
   dialect: "postgresql",
   dbCredentials: {

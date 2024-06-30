@@ -1,12 +1,13 @@
-"use client";
+'use client';
 
-import { useSearchParams } from "next/navigation";
-import { Button } from "./ui/button";
-import { Icons } from "./icons";
+import { useSearchParams } from 'next/navigation';
+
+import { Icons } from './icons';
+import { Button } from './ui/button';
 
 export default function GoogleSignInButton() {
   const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get("callbackUrl");
+  const callbackUrl = searchParams.get('callbackUrl');
 
   return (
     <Button

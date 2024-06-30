@@ -1,9 +1,21 @@
 'use client';
+
+import { useState } from 'react';
+import { useParams, useRouter } from 'next/navigation';
+import { cn } from '@/utils/cn';
+import {
+  profileSchema,
+  type ProfileFormValues,
+} from '@/validator/profile-form-schema';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { AlertTriangleIcon, Trash, Trash2Icon } from 'lucide-react';
+import { SubmitHandler, useFieldArray, useForm } from 'react-hook-form';
+
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
-  AccordionTrigger
+  AccordionTrigger,
 } from '@/components/ui/accordion';
 import { Button } from '@/components/ui/button';
 import {
@@ -12,7 +24,7 @@ import {
   FormField,
   FormItem,
   FormLabel,
-  FormMessage
+  FormMessage,
 } from '@/components/ui/form';
 import { Heading } from '@/components/ui/heading';
 import { Input } from '@/components/ui/input';
@@ -21,16 +33,9 @@ import {
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue
+  SelectValue,
 } from '@/components/ui/select';
 import { Separator } from '@/components/ui/separator';
-import { profileSchema, type ProfileFormValues } from '@/validator/profile-form-schema';
-import { cn } from '@/utils/cn';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { AlertTriangleIcon, Trash, Trash2Icon } from 'lucide-react';
-import { useParams, useRouter } from 'next/navigation';
-import { useState } from 'react';
-import { SubmitHandler, useFieldArray, useForm } from 'react-hook-form';
 
 interface ProfileFormType {
   initialData: any | null;
@@ -39,7 +44,7 @@ interface ProfileFormType {
 
 export const CreateProfileOne: React.FC<ProfileFormType> = ({
   initialData,
-  categories
+  categories,
 }) => {
   const params = useParams();
   const router = useRouter();
@@ -65,25 +70,25 @@ export const CreateProfileOne: React.FC<ProfileFormType> = ({
         startdate: '',
         enddate: '',
         jobcountry: '',
-        jobcity: ''
-      }
-    ]
+        jobcity: '',
+      },
+    ],
   };
 
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(profileSchema),
     defaultValues,
-    mode: 'onChange'
+    mode: 'onChange',
   });
 
   const {
     control,
-    formState: { errors }
+    formState: { errors },
   } = form;
 
   const { append, remove, fields } = useFieldArray({
     control,
-    name: 'jobs'
+    name: 'jobs',
   });
 
   const onSubmit = async (data: ProfileFormValues) => {
@@ -129,7 +134,14 @@ export const CreateProfileOne: React.FC<ProfileFormType> = ({
     {
       id: 'Step 1',
       name: 'Personal Information',
-      fields: ['firstname', 'lastname', 'email', 'contactno', 'country', 'city']
+      fields: [
+        'firstname',
+        'lastname',
+        'email',
+        'contactno',
+        'country',
+        'city',
+      ],
     },
     {
       id: 'Step 2',
@@ -142,19 +154,19 @@ export const CreateProfileOne: React.FC<ProfileFormType> = ({
           `jobs.${index}.startdate`,
           `jobs.${index}.enddate`,
           `jobs.${index}.jobcountry`,
-          `jobs.${index}.jobcity`
+          `jobs.${index}.jobcity`,
           // Add other field names as needed
         ])
-        .flat()
+        .flat(),
     },
-    { id: 'Step 3', name: 'Complete' }
+    { id: 'Step 3', name: 'Complete' },
   ];
 
   const next = async () => {
     const fields = steps[currentStep].fields;
 
     const output = await form.trigger(fields as FieldName[], {
-      shouldFocus: true
+      shouldFocus: true,
     });
 
     if (!output) return;
@@ -200,7 +212,7 @@ export const CreateProfileOne: React.FC<ProfileFormType> = ({
             <li key={step.name} className="md:flex-1">
               {currentStep > index ? (
                 <div className="group flex w-full flex-col border-l-4 border-sky-600 py-2 pl-4 transition-colors md:border-l-0 md:border-t-4 md:pb-0 md:pl-0 md:pt-4">
-                  <span className="text-sm font-medium text-sky-600 transition-colors ">
+                  <span className="text-sm font-medium text-sky-600 transition-colors">
                     {step.id}
                   </span>
                   <span className="text-sm font-medium">{step.name}</span>
@@ -403,11 +415,11 @@ export const CreateProfileOne: React.FC<ProfileFormType> = ({
                           className="absolute right-8"
                           onClick={() => remove(index)}
                         >
-                          <Trash2Icon className="h-4 w-4 " />
+                          <Trash2Icon className="h-4 w-4" />
                         </Button>
                         {errors?.jobs?.[index] && (
                           <span className="alert absolute right-8">
-                            <AlertTriangleIcon className="h-4 w-4   text-red-700" />
+                            <AlertTriangleIcon className="h-4 w-4 text-red-700" />
                           </span>
                         )}
                       </AccordionTrigger>
@@ -570,7 +582,7 @@ export const CreateProfileOne: React.FC<ProfileFormType> = ({
                         startdate: '',
                         enddate: '',
                         jobcountry: '',
-                        jobcity: ''
+                        jobcity: '',
                       })
                     }
                   >

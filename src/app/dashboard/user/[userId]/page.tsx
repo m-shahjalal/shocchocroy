@@ -1,12 +1,13 @@
+import React from 'react';
+
+import { ScrollArea } from '@/components/ui/scroll-area';
 import BreadCrumb from '@/components/breadcrumb';
 import { ProductForm } from '@/components/forms/product-form';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import React from 'react';
 
 export default function Page() {
   const breadcrumbItems = [
     { title: 'User', link: '/dashboard/user' },
-    { title: 'Create', link: '/dashboard/user/create' }
+    { title: 'Create', link: '/dashboard/user/create' },
   ];
   return (
     <ScrollArea className="h-full">
@@ -15,7 +16,7 @@ export default function Page() {
         <ProductForm
           categories={[
             { _id: 'shirts', name: 'shirts' },
-            { _id: 'pants', name: 'pants' }
+            { _id: 'pants', name: 'pants' },
           ]}
           initialData={null}
           key={null}

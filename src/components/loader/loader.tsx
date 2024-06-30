@@ -1,26 +1,27 @@
-import React from "react";
-import { cn } from "../../utils/cn";
-import { BarsSpinner } from "./bars-spinner";
-import { PulseLoader } from "./pulse-spinner";
-import { Spinner } from "./spinner";
-import { ThreeDotScale } from "./three-dot-scale";
+import React from 'react';
+
+import { cn } from '../../utils/cn';
+import { BarsSpinner } from './bars-spinner';
+import { PulseLoader } from './pulse-spinner';
+import { Spinner } from './spinner';
+import { ThreeDotScale } from './three-dot-scale';
 
 const loaderStyles = {
-  base: "h-auto",
+  base: 'h-auto',
   sizes: {
-    sm: "w-5",
-    md: "w-[22px]",
-    lg: "w-7",
-    xl: "w-9",
+    sm: 'w-5',
+    md: 'w-[22px]',
+    lg: 'w-7',
+    xl: 'w-9',
   },
   colors: {
-    current: "text-current",
-    primary: "text-primary",
-    secondary: "text-secondary",
-    danger: "text-red",
-    info: "text-blue",
-    success: "text-green",
-    warning: "text-orange",
+    current: 'text-current',
+    primary: 'text-primary',
+    secondary: 'text-secondary',
+    danger: 'text-red',
+    info: 'text-blue',
+    success: 'text-green',
+    warning: 'text-orange',
   },
 };
 
@@ -41,9 +42,9 @@ export interface LoaderTypes extends React.SVGProps<SVGSVGElement> {
 }
 
 export function Loader({
-  size = "md",
-  color = "current",
-  variant = "bars",
+  size = 'md',
+  color = 'current',
+  variant = 'bars',
   className,
   ...props
 }: LoaderTypes) {
@@ -62,4 +63,4 @@ export function Loader({
   );
 }
 
-Loader.displayName = "Loader";
+Loader.displayName = 'Loader';

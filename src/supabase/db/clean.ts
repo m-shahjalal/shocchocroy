@@ -1,4 +1,5 @@
 import { env } from '@/env.mjs';
+
 import 'dotenv/config';
 
 import { Pool } from 'pg';
@@ -15,7 +16,7 @@ const main = async () => {
 
   try {
     // Clear full DB
-    await client.query("BEGIN");
+    await client.query('BEGIN');
 
     // Retrieve all table names in the current database
     const resTables = await client.query(`
@@ -55,11 +56,11 @@ const main = async () => {
       );
     }
 
-    await client.query("COMMIT");
-    console.info("✅    DROP SUCCESS");
+    await client.query('COMMIT');
+    console.info('✅    DROP SUCCESS');
   } catch (error) {
-    await client.query("ROLLBACK");
-    console.error("Error clearing database:", error);
+    await client.query('ROLLBACK');
+    console.error('Error clearing database:', error);
   } finally {
     client.release();
   }

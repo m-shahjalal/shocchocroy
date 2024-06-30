@@ -1,20 +1,21 @@
-"use client";
+'use client';
 
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { Dispatch, SetStateAction } from 'react';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { NavItem } from '@/types';
+import { cn } from '@/utils/cn';
+import { sidebarAtom } from '@/utils/store';
+import { useAtom } from 'jotai';
 
-import { Icons } from "@/components/icons";
-import { NavItem } from "@/types";
-import { cn } from "@/utils/cn";
-import { Dispatch, SetStateAction } from "react";
+import { Icons } from '@/components/icons';
+
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "./ui/tooltip";
-import { useAtom } from "jotai";
-import { sidebarAtom } from "@/utils/store";
+} from './ui/tooltip';
 
 interface DashboardNavProps {
   items: NavItem[];
@@ -38,17 +39,17 @@ export function DashboardNav({
     <nav className="grid items-start gap-2">
       <TooltipProvider>
         {items.map((item, index) => {
-          const Icon = Icons[item.icon || "arrowRight"];
+          const Icon = Icons[item.icon || 'arrowRight'];
           return (
             item.href && (
               <Tooltip key={index}>
                 <TooltipTrigger asChild>
                   <Link
-                    href={item.disabled ? "/" : item.href}
+                    href={item.disabled ? '/' : item.href}
                     className={cn(
-                      "flex items-center gap-2 overflow-hidden rounded-md py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground",
-                      path === item.href ? "bg-accent" : "transparent",
-                      item.disabled && "cursor-not-allowed opacity-80"
+                      'flex items-center gap-2 overflow-hidden rounded-md py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground',
+                      path === item.href ? 'bg-accent' : 'transparent',
+                      item.disabled && 'cursor-not-allowed opacity-80'
                     )}
                     onClick={() => {
                       if (setOpen) setOpen(false);
@@ -60,7 +61,7 @@ export function DashboardNav({
                     (!sidebarState.isSidebarOpen && !isMobileNav) ? (
                       <span className="mr-2 truncate">{item.title}</span>
                     ) : (
-                      ""
+                      ''
                     )}
                   </Link>
                 </TooltipTrigger>
@@ -69,7 +70,7 @@ export function DashboardNav({
                   side="right"
                   sideOffset={8}
                   className={
-                    sidebarState.isSidebarOpen ? "inline-block" : "hidden"
+                    sidebarState.isSidebarOpen ? 'inline-block' : 'hidden'
                   }
                 >
                   {item.title}

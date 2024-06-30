@@ -1,8 +1,11 @@
 'use client';
+
 import { ColumnDef } from '@tanstack/react-table';
-import { CellAction } from './cell-action';
+
 import { User } from '@/config/data';
 import { Checkbox } from '@/components/ui/checkbox';
+
+import { CellAction } from './cell-action';
 
 export const columns: ColumnDef<User>[] = [
   {
@@ -22,26 +25,26 @@ export const columns: ColumnDef<User>[] = [
       />
     ),
     enableSorting: false,
-    enableHiding: false
+    enableHiding: false,
   },
   {
     accessorKey: 'name',
-    header: 'NAME'
+    header: 'NAME',
   },
   {
     accessorKey: 'company',
-    header: 'COMPANY'
+    header: 'COMPANY',
   },
   {
     accessorKey: 'role',
-    header: 'ROLE'
+    header: 'ROLE',
   },
   {
     accessorKey: 'status',
-    header: 'STATUS'
+    header: 'STATUS',
   },
   {
     id: 'actions',
-    cell: ({ row }) => <CellAction data={row.original} />
-  }
+    cell: ({ row }) => <CellAction data={row.original} />,
+  },
 ];

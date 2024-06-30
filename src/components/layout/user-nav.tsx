@@ -1,6 +1,10 @@
-"use client";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
+'use client';
+
+import { logout, me } from '@/utils/handle-auth';
+import { User } from '@supabase/supabase-js';
+
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,9 +14,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuShortcut,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { logout, me } from "@/utils/handle-auth";
-import { User } from "@supabase/supabase-js";
+} from '@/components/ui/dropdown-menu';
 
 export function UserNav({ user }: { user: User }) {
   if (user) {
@@ -22,10 +24,10 @@ export function UserNav({ user }: { user: User }) {
           <Button variant="ghost" className="relative h-8 w-8 rounded-full">
             <Avatar className="h-8 w-8">
               <AvatarImage
-                src={user?.action_link ?? ""}
-                alt={user?.user_metadata?.name ?? ""}
+                src={user?.action_link ?? ''}
+                alt={user?.user_metadata?.name ?? ''}
               />
-              <AvatarFallback>{"s"}</AvatarFallback>
+              <AvatarFallback>{'s'}</AvatarFallback>
             </Avatar>
           </Button>
         </DropdownMenuTrigger>

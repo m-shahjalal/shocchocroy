@@ -1,8 +1,10 @@
-"use client";
+'use client';
 
-import { Input } from "@/components/ui/input";
-import { useAtom } from "jotai";
-
+import Link from 'next/link';
+import { logout } from '@/utils/handle-auth';
+import { sidebarAtom } from '@/utils/store';
+import { DropdownMenuItem } from '@radix-ui/react-dropdown-menu';
+import { useAtom } from 'jotai';
 import {
   LogOut,
   Menu,
@@ -12,22 +14,20 @@ import {
   ShoppingBasket,
   User as UserIcon,
   X,
-} from "lucide-react";
-import Link from "next/link";
+} from 'lucide-react';
 
-import { PAGES } from "@/config/pages";
-import useAuth from "@/hooks/use-auth";
-import { logout } from "@/utils/handle-auth";
-import { DropdownMenuItem } from "@radix-ui/react-dropdown-menu";
-import { Button } from "../ui/button";
+import { PAGES } from '@/config/pages';
+import useAuth from '@/hooks/use-auth';
+import { Input } from '@/components/ui/input';
+
+import { Button } from '../ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "../ui/dropdown-menu";
-import { sidebarAtom } from "@/utils/store";
+} from '../ui/dropdown-menu';
 
 export default function Header() {
   const [sidebarState, toggleSidebar] = useAtom(sidebarAtom);
@@ -40,34 +40,34 @@ export default function Header() {
   };
 
   return (
-    <header className="shadow-sm fixed z-10 left-0 right-0 bg-white h-16">
-      <div className="container h-full flex items-center gap-4 justify-between">
-        <div className="flex items-center flex-1 gap-2 justify-start">
-          <span className="lg:hidden z-30 cursor-pointer -top-[42px] left-7">
+    <header className="fixed left-0 right-0 z-10 h-16 bg-white shadow-sm">
+      <div className="container flex h-full items-center justify-between gap-4">
+        <div className="flex flex-1 items-center justify-start gap-2">
+          <span className="-top-[42px] left-7 z-30 cursor-pointer lg:hidden">
             {sidebarState.isSidebarOpen ? (
               <X onClick={handleSidebar} size={24} />
             ) : (
               <Menu onClick={handleSidebar} size={24} />
             )}
           </span>
-          <Link href="/" className="text-blue-500 font-bold text-xl">
+          <Link href="/" className="text-xl font-bold text-blue-500">
             স্বচ্ছক্রয়
           </Link>
         </div>
-        <div className="relative hidden sm:block w-full max-w-80">
+        <div className="relative hidden w-full max-w-80 sm:block">
           <Input
             type="text"
             placeholder="Search sari..."
-            className="pl-10 pr-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-0 focus:border-transparent w-full lg:w-80"
+            className="w-full rounded-md border border-gray-300 py-2 pl-10 pr-4 focus:border-transparent focus:outline-none focus:ring-0 lg:w-80"
           />
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-500" />
+          <Search className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 transform text-gray-500" />
         </div>
         <Nav />
         <UserDropdown />
 
         <Link className="relative" href="#" prefetch={false}>
-          <ShoppingBasket className="h-10 w-10 p-2 bg-blue-500 text-gray-200 rounded-full" />
-          <span className="absolute top-0 right-0 -mt-2 -mr-2 bg-green-500 text-gray-100 rounded-full px-2 py-1 text-xs font-bold">
+          <ShoppingBasket className="h-10 w-10 rounded-full bg-blue-500 p-2 text-gray-200" />
+          <span className="absolute right-0 top-0 -mr-2 -mt-2 rounded-full bg-green-500 px-2 py-1 text-xs font-bold text-gray-100">
             3
           </span>
         </Link>
@@ -78,25 +78,25 @@ export default function Header() {
 
 const Nav = () => (
   <nav
-    className={`hidden mt-4 lg:mt-0 lg:flex lg:items-center lg:space-x-6 flex-col lg:flex-row`}
+    className={`mt-4 hidden flex-col lg:mt-0 lg:flex lg:flex-row lg:items-center lg:space-x-6`}
   >
     <Link
       href="#"
-      className="block text-gray-600 hover:text-primary transition-colors duration-300 mb-2 lg:mb-0 text-center"
+      className="mb-2 block text-center text-gray-600 transition-colors duration-300 hover:text-primary lg:mb-0"
       prefetch={false}
     >
       Traditional
     </Link>
     <Link
       href="#"
-      className="block text-gray-600 hover:text-primary transition-colors duration-300 mb-2 lg:mb-0 text-center"
+      className="mb-2 block text-center text-gray-600 transition-colors duration-300 hover:text-primary lg:mb-0"
       prefetch={false}
     >
       Festive
     </Link>
     <Link
       href="#"
-      className="block text-gray-600 hover:text-primary transition-colors duration-300 mb-2 lg:mb-0 text-center"
+      className="mb-2 block text-center text-gray-600 transition-colors duration-300 hover:text-primary lg:mb-0"
       prefetch={false}
     >
       Contemporary
@@ -109,7 +109,7 @@ const UserDropdown = () => {
 
   const handleLogout = async () => {
     const data = await logout();
-    console.log("data", data);
+    console.log('data', data);
   };
 
   return (
@@ -117,9 +117,9 @@ const UserDropdown = () => {
       <DropdownMenuTrigger asChild>
         <Button
           variant="outline"
-          className="h-10 w-10 bg-blue-500 text-white rounded-full"
+          className="h-10 w-10 rounded-full bg-blue-500 text-white"
         >
-          {user?.user_metadata.name?.[0] || user?.email?.[0] || "SP"}
+          {user?.user_metadata.name?.[0] || user?.email?.[0] || 'SP'}
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-60">
@@ -130,8 +130,8 @@ const UserDropdown = () => {
           <>
             <DropdownMenuItem>
               <Link
-                className="p-2 flex gap-2 justify-start items-center h-full"
-                href={"#"}
+                className="flex h-full items-center justify-start gap-2 p-2"
+                href={'#'}
               >
                 <UserIcon size={20} />
                 Profile
@@ -140,8 +140,8 @@ const UserDropdown = () => {
 
             <DropdownMenuItem>
               <Link
-                className="p-2 flex gap-2 justify-start items-center h-full"
-                href={"#"}
+                className="flex h-full items-center justify-start gap-2 p-2"
+                href={'#'}
               >
                 <ShoppingBag size={20} />
                 My orders
@@ -149,8 +149,8 @@ const UserDropdown = () => {
             </DropdownMenuItem>
             <DropdownMenuItem>
               <Link
-                className="p-2 flex gap-2 justify-start items-center h-full"
-                href={"#"}
+                className="flex h-full items-center justify-start gap-2 p-2"
+                href={'#'}
               >
                 <Settings size={20} />
                 Settings
@@ -158,7 +158,7 @@ const UserDropdown = () => {
             </DropdownMenuItem>
             <DropdownMenuItem
               onClick={handleLogout}
-              className="p-2 flex gap-2 justify-start items-center h-full"
+              className="flex h-full items-center justify-start gap-2 p-2"
             >
               <LogOut size={20} /> Log out
             </DropdownMenuItem>
@@ -167,7 +167,7 @@ const UserDropdown = () => {
           <>
             <DropdownMenuItem>
               <Link
-                className="p-2 flex gap-2 justify-start items-center h-full"
+                className="flex h-full items-center justify-start gap-2 p-2"
                 href={PAGES.LOGIN}
               >
                 Login
@@ -175,7 +175,7 @@ const UserDropdown = () => {
             </DropdownMenuItem>
             <DropdownMenuItem>
               <Link
-                className="p-2 flex gap-2 justify-start items-center h-full"
+                className="flex h-full items-center justify-start gap-2 p-2"
                 href={PAGES.REGISTER}
               >
                 Register

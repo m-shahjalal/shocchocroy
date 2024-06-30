@@ -1,9 +1,11 @@
-"use client";
-import { Trash } from "lucide-react";
-import Image from "next/image";
-import { IMG_MAX_LIMIT } from "./forms/product-form";
-import { Button } from "./ui/button";
-import { useToast } from "./ui/use-toast";
+'use client';
+
+import Image from 'next/image';
+import { Trash } from 'lucide-react';
+
+import { IMG_MAX_LIMIT } from './forms/product-form';
+import { Button } from './ui/button';
+import { useToast } from './ui/use-toast';
 
 // interface ImageUploadProps {
 //   onChange?: any;
@@ -45,7 +47,7 @@ export default function FileUpload({ onChange, onRemove, value }) {
                   fill
                   className="object-cover"
                   alt="Image"
-                  src={item.fileUrl || ""}
+                  src={item.fileUrl || ''}
                 />
               </div>
             </div>

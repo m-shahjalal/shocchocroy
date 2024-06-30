@@ -1,9 +1,11 @@
-import ThemeToggle from "@/components/layout/ThemeToggle/theme-toggle";
-import { cn } from "@/utils/cn";
-import { MobileSidebar } from "./mobile-sidebar";
-import { UserNav } from "./user-nav";
-import Link from "next/link";
-import { getAuthenticatedUser } from "@/utils/auth.action";
+import Link from 'next/link';
+import { getAuthenticatedUser } from '@/utils/auth.action';
+import { cn } from '@/utils/cn';
+
+import ThemeToggle from '@/components/layout/ThemeToggle/theme-toggle';
+
+import { MobileSidebar } from './mobile-sidebar';
+import { UserNav } from './user-nav';
 
 export default async function Header() {
   const user = await getAuthenticatedUser();
@@ -12,7 +14,7 @@ export default async function Header() {
       <nav className="flex h-14 items-center justify-between px-4">
         <div className="hidden lg:block">
           <Link
-            href={"https://github.com/Kiranism/next-shadcn-dashboard-starter"}
+            href={'https://github.com/Kiranism/next-shadcn-dashboard-starter'}
             target="_blank"
           >
             <svg
@@ -29,7 +31,7 @@ export default async function Header() {
             </svg>
           </Link>
         </div>
-        <div className={cn("block lg:!hidden")}>
+        <div className={cn('block lg:!hidden')}>
           <MobileSidebar />
         </div>
 

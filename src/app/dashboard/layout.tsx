@@ -1,6 +1,6 @@
-import Header from "@/components/layout/admin-header";
-import Providers from "@/components/layout/providers";
-import Sidebar from "@/components/layout/sidebar";
+import Header from '@/components/layout/admin-header';
+import AdminSidebar from '@/components/layout/admin-sidebar';
+import Providers from '@/components/layout/providers';
 
 export default function DashboardLayout({
   children,
@@ -11,7 +11,7 @@ export default function DashboardLayout({
     <Providers>
       <Header />
       <div className="flex h-screen overflow-hidden">
-        <Sidebar />
+        <AdminSidebar />
         <main className="flex-1 overflow-hidden pt-16">{children}</main>
       </div>
     </Providers>
