@@ -1,9 +1,9 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
-import NProgressProviders from '@/providers/progressbar-provider';
 import { cn } from '@/utils/cn';
 
 import './global.css';
+import NProgress from '@/components/loader/n-progress';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -20,7 +20,10 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body className={cn(inter.className, 'h-screen')}>
-        <NProgressProviders>{children}</NProgressProviders>
+        <>
+          {children}
+          <NProgress />
+        </>
       </body>
     </html>
   );

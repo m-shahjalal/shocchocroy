@@ -1,17 +1,16 @@
 'use client';
 
-import { useTransition } from 'react';
-import Image from 'next/image';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import google from '@/assets/icons/google.png';
-import { login } from '@/utils/auth.action';
+import { googleLogin, login } from '@/utils/auth.action';
 import { cn } from '@/utils/cn';
 import {
-  loginFormSchema,
   LoginValuesType,
+  loginFormSchema,
 } from '@/validator/login-form-schema';
 import { zodResolver } from '@hookform/resolvers/zod';
+import Image from 'next/image';
+import Link from 'next/link';
+import { useTransition } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 
 import { PAGES } from '@/config/pages';
@@ -28,8 +27,8 @@ import {
 import { Input } from '../ui/input';
 
 export const Login = () => {
-  const router = useRouter();
   const [isPending, startTransition] = useTransition();
+  const [isGooglePending, startGoogleTransition] = useTransition();
   const defaultValues: LoginValuesType = { email: '', password: '' };
 
   const { control, handleSubmit } = useForm<LoginValuesType>({
@@ -40,6 +39,11 @@ export const Login = () => {
 
   const handleLogin = (values: LoginValuesType) => {
     startTransition(async () => await login(values));
+  };
+
+  const handleGoogleLogin = () => {
+    console.log("Google login")
+    startGoogleTransition(async () => await googleLogin());
   };
 
   return (
@@ -107,7 +111,12 @@ export const Login = () => {
           <div className="border-b py-2" />
         </CardContent>
         <CardFooter>
-          <Button className="w-full" variant="outline">
+          <Button
+            isLoading={isGooglePending}
+            onClick={handleGoogleLogin}
+            className="w-full"
+            variant="outline"
+          >
             <Image
               src={google.src}
               className="space-x-2"

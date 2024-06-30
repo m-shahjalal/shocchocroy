@@ -22,12 +22,13 @@ export default function AdminSidebar({ className }: SidebarProps) {
     toggle({ ...sidebarState, isSidebarOpen: !sidebarState.isSidebarOpen });
     setTimeout(() => setStatus(false), 500);
   };
+  
   return (
     <nav
       className={cn(
         `relative z-10 hidden h-screen flex-none border-r pt-20 md:block`,
         status && 'duration-500',
-        !sidebarState.isSidebarOpen ? 'w-72' : 'w-[72px]',
+        sidebarState.isSidebarOpen ? 'w-[72px]' : 'w-72',
         className
       )}
     >

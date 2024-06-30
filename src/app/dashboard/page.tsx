@@ -1,8 +1,6 @@
-import { users } from '@/config/data';
-import BreadCrumb from '@/components/breadcrumb';
-import { UserClient } from '@/components/tables/user-tables/client';
+import { getProducts } from '@/server/product-action';
 
-const breadcrumbItems = [{ title: 'User', link: '/dashboard/user' }];
-export default function page() {
+export default async function page() {
+  const data = await getProducts();
   return <div className="flex-1 space-y-4 p-4 pt-6 md:p-8">Dashboard</div>;
 }
