@@ -1,16 +1,12 @@
-import { defineConfig } from "drizzle-kit";
+import { config } from 'dotenv';
+import { defineConfig } from 'drizzle-kit';
 
-import { env } from "@/env.mjs";
+import { env } from '@/env.mjs';
 
-if (!process.env.DATABASE_URL) {
-  throw new Error("DATABASE_URL is missing");
-}
-
+config({ path: '.env' });
 export default defineConfig({
-  schema: "src/supabase/db/schema/*",
-  out: "./src/supabase/db/migrations",
-  dialect: "postgresql",
-  dbCredentials: {
-    url: env.NEXT_PUBLIC_SUPABASE_URL,
-  },
+  dialect: 'postgresql',
+  out: './supabase/migrations',
+  schema: './supabase/db/schema/*',
+  dbCredentials: { url: env.DATABASE_URL },
 });

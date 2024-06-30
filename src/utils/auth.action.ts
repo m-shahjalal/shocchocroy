@@ -2,7 +2,7 @@
 
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
-import { createClient } from '@/supabase/server';
+import { createClient } from '@/utils/supabase-server';
 import { LoginValuesType } from '@/validator/login-form-schema';
 import { AuthError, User } from '@supabase/supabase-js';
 

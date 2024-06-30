@@ -1,4 +1,7 @@
 {
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
   "cSpell.words": [
     "Academi",
     "contactno",
@@ -33,5 +36,10 @@
     "Tantuj",
     "স্বচ্ছক্রয়",
     "হ্যালো"
-  ]
+  ],
+  "deno.enablePaths": [
+    "supabase/functions"
+  ],
+  "deno.lint": true,
+  "deno.unstable": true
 }
