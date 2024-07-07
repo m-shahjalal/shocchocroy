@@ -1,4 +1,4 @@
-import { dbTableId } from '@/utils/db';
+import { dbTableId } from '@/utils/db-utility';
 import { relations } from 'drizzle-orm';
 import {
   doublePrecision,
@@ -8,30 +8,33 @@ import {
   varchar,
 } from 'drizzle-orm/pg-core';
 
-import {
-  category,
-  CategoryInsert,
-  CategorySelect
-} from './category';
-import { CompleteDiscount, discount, NewDiscount } from './discount';
-import { CompleteProductSKU, NewProductSKU, productSku } from './product-sku';
-import {
-  CompleteSubCategory,
-  NewSubCategory,
-  subCategory,
-} from './sub-category';
+import { attachment, AttachmentSelect } from '../attachments';
+import { category, CategorySelect } from './category';
+import { CompleteDiscount, discount } from './discount';
+import { NewProductInsight, productInsight } from './product-insight';
+import { CompleteSubCategory, subCategory } from './sub-category';
 
 export const product = pgTable('product', {
   id: dbTableId(),
-  serial: dbTableId('serial').notNull(),
   title: varchar('title', { length: 255 }).notNull(),
   description: varchar('description').notNull(),
 
-  categoryId: dbTableId('category_id').notNull(),
-  discountId: dbTableId('discount_id').notNull(),
+  categoryId: dbTableId('category_id')
+    .notNull()
+    .references(() => category.id),
+
+  subCategoryId: dbTableId('sub_category_id')
+    .notNull()
+    .references(() => subCategory.id),
+
+  discountId: dbTableId('discount_id').references(() => discount.id),
+
+  size: varchar('size', { length: 63 }),
+  color: varchar('color', { length: 63 }),
 
   price: doublePrecision('price').notNull(),
-  stock: integer('quantity').notNull(),
+  stock: integer('stock').notNull(),
+  remark: varchar('remark'),
 
   createdAt: timestamp('created_at').defaultNow(),
   updatedAt: timestamp('updated_at'),
@@ -43,28 +46,39 @@ export const product = pgTable('product', {
 });
 
 export const productRelations = relations(product, ({ one, many }) => ({
-  details: one(productSku, {
-    fields: [product.id],
-    references: [productSku.productId],
+  discount: one(discount, {
+    fields: [product.discountId],
+    references: [discount.id],
   }),
 
-  discount: many(discount),
-  category: one(category),
-  subCategory: one(subCategory),
+  category: one(category, {
+    fields: [product.categoryId],
+    references: [category.id],
+  }),
+
+  subCategory: one(subCategory, {
+    fields: [product.subCategoryId],
+    references: [subCategory.id],
+  }),
+
+  insight: one(productInsight, {
+    fields: [product.id],
+    references: [productInsight.productId],
+  }),
+
+  attachment: many(attachment),
 }));
 
 export type ProductInsert = typeof product.$inferInsert;
 export type ProductSelect = typeof product.$inferSelect;
 
 export type NewProduct = ProductInsert & {
-  discount: NewDiscount;
-  category: CategoryInsert;
-  details: NewProductSKU;
-  subCategory: NewSubCategory;
+  details: NewProductInsight;
 };
+
 export type CompleteProduct = ProductSelect & {
-  discount: CompleteDiscount;
+  discount?: CompleteDiscount;
   category: CategorySelect;
-  details: CompleteProductSKU;
   subCategory: CompleteSubCategory;
+  attachments: AttachmentSelect[];
 };

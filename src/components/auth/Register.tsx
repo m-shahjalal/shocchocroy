@@ -5,7 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import google from '@/assets/icons/google.png';
-import { signup } from '@/utils/auth.action';
+import { googleLogin, signup } from '@/utils/auth.action';
 import { cn } from '@/utils/cn';
 import {
   loginFormSchema,
@@ -30,6 +30,7 @@ import { Input } from '../ui/input';
 export const Register = () => {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
+  const [isGooglePending, startGoogleTransition] = useTransition();
   const defaultValues: LoginValuesType = { email: '', password: '' };
 
   const { handleSubmit, control } = useForm<LoginValuesType>({
@@ -40,6 +41,10 @@ export const Register = () => {
 
   const handleLogin = (values: LoginValuesType) => {
     startTransition(async () => await signup(values));
+  };
+
+  const handleGoogleLogin = () => {
+    startGoogleTransition(async () => await googleLogin());
   };
 
   return (
@@ -106,14 +111,21 @@ export const Register = () => {
           <div className="border-b py-2" />
         </CardContent>
         <CardFooter>
-          <Button className="w-full" variant="outline">
-            <Image
-              src={google.src}
-              className="space-x-2"
-              alt="google"
-              width={20}
-              height={20}
-            />
+          <Button
+            isLoading={isGooglePending}
+            onClick={handleGoogleLogin}
+            className="w-full"
+            variant="outline"
+          >
+            {isGooglePending ? null : (
+              <Image
+                src={google.src}
+                className="space-x-2"
+                alt="google"
+                width={20}
+                height={20}
+              />
+            )}
             Sign in with Google
           </Button>
         </CardFooter>

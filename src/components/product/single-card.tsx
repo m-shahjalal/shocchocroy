@@ -1,3 +1,4 @@
+import { CompleteProduct } from '@/server/schema';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -12,7 +13,8 @@ import {
   CardTitle,
 } from '../ui/card';
 
-const SingleCard = ({ data }: { data: FIX_ME }) => {
+const SingleCard = ({ data }: { data: CompleteProduct }) => {
+  console.log(data);
   return (
     <Card key={data.id} className="flex flex-col">
       <CardHeader>
@@ -22,7 +24,12 @@ const SingleCard = ({ data }: { data: FIX_ME }) => {
       </CardHeader>
 
       <CardContent className="flex flex-1 flex-col items-center justify-center gap-2">
-        <Image src={data.image} width={200} height={200} alt="product" />
+        <Image
+          src={(data.attachments?.[0].link)}
+          width={200}
+          height={200}
+          alt="product"
+        />
       </CardContent>
       <CardFooter className="flex justify-between self-end">
         <Button>Add To Cart</Button>

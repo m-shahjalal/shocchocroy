@@ -5,6 +5,9 @@ export const PAGES = {
   FORGOT_PASSWORD: '/forgot-password',
   RESET_PASSWORD: '/reset-password',
   ERROR: '/error',
-
   PRODUCTS: '/products',
+  
+  DASHBOARD: {
+    PRODUCTS: '/dashboard/product',
+  },
 };

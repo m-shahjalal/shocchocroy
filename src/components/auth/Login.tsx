@@ -1,16 +1,16 @@
 'use client';
 
+import { useTransition } from 'react';
+import Image from 'next/image';
+import Link from 'next/link';
 import google from '@/assets/icons/google.png';
 import { googleLogin, login } from '@/utils/auth.action';
 import { cn } from '@/utils/cn';
 import {
-  LoginValuesType,
   loginFormSchema,
+  LoginValuesType,
 } from '@/validator/login-form-schema';
 import { zodResolver } from '@hookform/resolvers/zod';
-import Image from 'next/image';
-import Link from 'next/link';
-import { useTransition } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 
 import { PAGES } from '@/config/pages';
@@ -42,7 +42,6 @@ export const Login = () => {
   };
 
   const handleGoogleLogin = () => {
-    console.log("Google login")
     startGoogleTransition(async () => await googleLogin());
   };
 
@@ -117,13 +116,15 @@ export const Login = () => {
             className="w-full"
             variant="outline"
           >
-            <Image
-              src={google.src}
-              className="space-x-2"
-              alt="google"
-              width={20}
-              height={20}
-            />
+            {isGooglePending ? null : (
+              <Image
+                src={google.src}
+                className="space-x-2"
+                alt="google"
+                width={20}
+                height={20}
+              />
+            )}
             Sign in with Google
           </Button>
         </CardFooter>

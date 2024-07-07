@@ -1,4 +1,4 @@
-import { dbTableId } from '@/utils/db';
+import { dbTableId } from '@/utils/db-utility';
 import { relations } from 'drizzle-orm';
 import { pgTable, varchar } from 'drizzle-orm/pg-core';
 
@@ -9,8 +9,13 @@ export const subCategory = pgTable('sub_category', {
   id: dbTableId(),
   name: varchar('name', { length: 255 }).notNull(),
   description: varchar('description'),
-  parentId: dbTableId('parent_id'),
-  productId: dbTableId('product_id'),
+
+  parentId: dbTableId('parent_id')
+    .notNull()
+    .references(() => category.id, {
+      onDelete: 'no action',
+      onUpdate: 'no action',
+    }),
 });
 
 export const subCategoryRelations = relations(subCategory, ({ one }) => ({
@@ -20,10 +25,11 @@ export const subCategoryRelations = relations(subCategory, ({ one }) => ({
   }),
 
   product: one(product, {
-    fields: [subCategory.productId],
-    references: [product.id],
+    fields: [subCategory.id],
+    references: [product.subCategoryId],
   }),
 }));
 
 export type NewSubCategory = typeof subCategory.$inferInsert;
-export type CompleteSubCategory = typeof subCategory.$inferSelect;
+export type SubCategorySelect = typeof subCategory.$inferSelect;
+export type CompleteSubCategory = SubCategorySelect & {};

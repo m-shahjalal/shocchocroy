@@ -1,4 +1,4 @@
-import { dbTableId } from '@/utils/db';
+import { dbTableId } from '@/utils/db-utility';
 import { boolean, pgTable, timestamp, varchar } from 'drizzle-orm/pg-core';
 
 export const address = pgTable('address', {

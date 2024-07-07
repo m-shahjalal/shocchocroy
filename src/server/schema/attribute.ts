@@ -1,7 +1,8 @@
-import { dbTableId } from '@/utils/db';
+import { dbTableId } from '@/utils/db-utility';
 import { relations } from 'drizzle-orm';
 import { pgTable, timestamp, varchar } from 'drizzle-orm/pg-core';
-import { productSku } from './product/product-sku';
+
+import { productInsight } from './product/product-insight';
 
 export const attribute = pgTable('product_attribute', {
   id: dbTableId(),
@@ -13,10 +14,10 @@ export const attribute = pgTable('product_attribute', {
   deletedAt: timestamp('deleted_at'),
 });
 
-export const attributeRelations = relations(attribute, ({one, many}) => ({
-  color: many(productSku),
-  size: many(productSku),
-}))
+export const attributeRelations = relations(attribute, ({ many }) => ({
+  color: many(productInsight),
+  size: many(productInsight),
+}));
 
 export type NewAttribute = typeof attribute.$inferInsert;
 export type CompleteAttribute = typeof attribute.$inferSelect;

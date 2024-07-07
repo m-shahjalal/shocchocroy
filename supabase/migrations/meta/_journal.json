@@ -1,1 +1,13 @@
-{"version":"7","dialect":"postgresql","entries":[{"idx":0,"version":"7","when":1719733935120,"tag":"0000_glamorous_iron_patriot","breakpoints":true}]}
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1720257710595,
+      "tag": "0000_heavy_dreaming_celestial",
+      "breakpoints": true
+    }
+  ]
+}

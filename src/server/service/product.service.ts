@@ -1,4 +1,4 @@
-import { db } from "@/utils/db"
+import { db } from "@/server/db"
 import { NewProduct } from "../schema"
 
 export const Product = {

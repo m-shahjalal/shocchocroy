@@ -7,6 +7,6 @@ config({ path: '.env' });
 export default defineConfig({
   dialect: 'postgresql',
   out: './supabase/migrations',
-  schema: './src/schema/*',
+  schema: './src/server/schema',
   dbCredentials: { url: env.DATABASE_URL },
 });

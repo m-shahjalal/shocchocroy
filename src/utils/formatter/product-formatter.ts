@@ -1,20 +1,10 @@
-import {
-  CategoryInsert,
-  NewDiscount,
-  NewProductSKU,
-  NewSubCategory,
-} from '@/server/schema';
-import { NewProduct, ProductInsert } from '@/server/schema/product/product';
+import { AttachmentInsert, NewProductInsight } from '@/server/schema';
+import { ProductInsert } from '@/server/schema/product/product';
+import { ProductSchemaType } from '@/validator/product-form-schema';
 import { createId } from '@paralleldrive/cuid2';
+import { User } from '@supabase/supabase-js';
 
-import { getAuthenticatedUser } from '../auth.action';
-import { serialNumber } from '../db';
-
-export const productData = async (inputs: NewProduct) => {
-  const user = await getAuthenticatedUser();
-
-  const categoryId = createId();
-  const discountId = createId();
+export const productData = (user: User, inputs: ProductSchemaType) => {
   const productId = createId();
 
   const product: ProductInsert = {
@@ -23,19 +13,22 @@ export const productData = async (inputs: NewProduct) => {
     price: inputs.price,
     stock: inputs.stock,
     title: inputs.title,
-    categoryId,
-    discountId,
-    serial: serialNumber(),
+    discountId: inputs.discountId,
+    categoryId: inputs.categoryId,
+    subCategoryId: inputs.subCategoryId,
     createdBy: user?.id!,
   };
 
-  const productSku: NewProductSKU = { ...inputs.details, productId };
-  const discount: NewDiscount = { ...inputs.discount, id: discountId };
-  const category: CategoryInsert = { id: categoryId, ...inputs.category };
+  const attachments: AttachmentInsert[] = [];
 
-  const subCategory: NewSubCategory = {
-    ...inputs.subCategory,
-    parentId: categoryId,
+  inputs.imageLinks.forEach((link) => {
+    attachments.push({ link, attachId: productId });
+  });
+
+  const productInsights: NewProductInsight = {
+    ...inputs.insights,
+    productId,
+    supplier: inputs.insights.supplier as any,
   };
-  return { product, productSku, discount, category, subCategory };
+  return { product, insights: productInsights, attachments };
 };

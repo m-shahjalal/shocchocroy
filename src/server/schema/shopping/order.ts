@@ -1,15 +1,15 @@
-import { dbTableId } from '@/utils/db';
+import { dbTableId } from '@/utils/db-utility';
 import {
   doublePrecision,
   pgTable,
-  timestamp,
-  varchar,
+  timestamp
 } from 'drizzle-orm/pg-core';
 
-export const orderDetails = pgTable('order_details', {
+export const order = pgTable('order_details', {
   id: dbTableId(),
-  userId: varchar('user_id', { length: 63 }),
-  paymentId: varchar('payment_id', { length: 63 }),
+  userId: dbTableId('user_id'),
+  paymentId: dbTableId('payment_id'),
+  promoId: dbTableId('promo_id'),
   total: doublePrecision('total'),
 
   createdAt: timestamp('created_at').defaultNow(),

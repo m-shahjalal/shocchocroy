@@ -1,19 +1,11 @@
-import * as schema from '@/server/schema';
 import { createId } from '@paralleldrive/cuid2';
-import { config } from 'dotenv';
 import { varchar } from 'drizzle-orm/pg-core';
-import { drizzle } from 'drizzle-orm/postgres-js';
-import postgres from 'postgres';
-
-config({ path: '.env' });
-
-const client = postgres(process.env.DATABASE_URL!);
-export const db = drizzle(client, { schema });
 
 /**
  *
- * @param isPrimaryKey is optional boolean value. default value is true, if you don't pass parameter it will be the primary key of the table
- * @returns a string representing unique (primary?) key
+ * @param name is optional string value. default value is `id`,
+ * @param isPrimaryKey is optional boolean value default is `false`, but if name is `id` it will be primaryKey,
+ * @returns a string representing unique key for storing as `ID` in database
  */
 export const dbTableId = (name = 'id', isPrimaryKey: boolean = false) => {
   if (name === 'id') isPrimaryKey = true;

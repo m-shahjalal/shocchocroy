@@ -1,24 +1,25 @@
 'use client';
 
-import { useState } from 'react';
-import { useParams, useRouter } from 'next/navigation';
+import { CompleteCategory, CompleteDiscount } from '@/server/schema';
+import { standardOptions } from '@/server/schema/enum';
+import {
+  productSchema,
+  ProductSchemaType,
+} from '@/validator/product-form-schema';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Trash } from 'lucide-react';
-import { useForm } from 'react-hook-form';
-import * as z from 'zod';
+import { CaretLeftIcon } from '@radix-ui/react-icons';
+import { useRouter } from 'next/navigation';
+import { useTransition } from 'react';
+import { FormProvider, useForm, useWatch } from 'react-hook-form';
 
 import { Button } from '@/components/ui/button';
-import { Checkbox } from '@/components/ui/checkbox';
 import {
-  Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
-import { Heading } from '@/components/ui/heading';
 import { Input } from '@/components/ui/input';
 import {
   Select,
@@ -27,217 +28,151 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Separator } from '@/components/ui/separator';
+import { PAGES } from '@/config/pages';
+import { ROUTES } from '@/config/routes';
 
-import FileUpload from '../file-upload';
-// import FileUpload from "@/components/FileUpload";
-import { useToast } from '../ui/use-toast';
+import Uploader from '../image-attachments';
+import { Card, CardTitle } from '../ui/card';
+import { Textarea } from '../ui/textarea';
+import { toast } from '../ui/use-toast';
 
-const ImgSchema = z.object({
-  fileName: z.string(),
-  name: z.string(),
-  fileSize: z.number(),
-  size: z.number(),
-  fileKey: z.string(),
-  key: z.string(),
-  fileUrl: z.string(),
-  url: z.string(),
-});
-export const IMG_MAX_LIMIT = 3;
-const formSchema = z.object({
-  name: z
-    .string()
-    .min(3, { message: 'Product Name must be at least 3 characters' }),
-  imgUrl: z
-    .array(ImgSchema)
-    .max(IMG_MAX_LIMIT, { message: 'You can only add up to 3 images' })
-    .min(1, { message: 'At least one image must be added.' }),
-  description: z
-    .string()
-    .min(3, { message: 'Product description must be at least 3 characters' }),
-  price: z.coerce.number(),
-  category: z.string().min(1, { message: 'Please select a category' }),
-});
-
-type ProductFormValues = z.infer<typeof formSchema>;
-
-interface ProductFormProps {
-  initialData: any | null;
-  categories: any;
-}
-
-export const ProductForm: React.FC<ProductFormProps> = ({
+export const ProductForm = ({
   initialData,
   categories,
+  discounts,
+}: {
+  initialData: null;
+  categories: CompleteCategory[];
+  discounts: CompleteDiscount[];
 }) => {
-  const params = useParams();
   const router = useRouter();
-  const { toast } = useToast();
-  const [open, setOpen] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [imgLoading, setImgLoading] = useState(false);
-  const title = initialData ? 'Edit product' : 'Create product';
-  const description = initialData ? 'Edit a product.' : 'Add a new product';
-  const toastMessage = initialData ? 'Product updated.' : 'Product created.';
-  const action = initialData ? 'Save changes' : 'Create';
+  const [loading, startTransition] = useTransition();
 
-  const defaultValues = initialData
-    ? initialData
-    : {
-        name: '',
-        description: '',
-        price: 0,
-        imgUrl: [],
-        category: '',
-      };
-
-  const form = useForm<ProductFormValues>({
-    resolver: zodResolver(formSchema),
-    defaultValues,
+  const form = useForm<ProductSchemaType>({
+    resolver: zodResolver(productSchema),
   });
 
-  const onSubmit = async (data: ProductFormValues) => {
-    try {
-      setLoading(true);
-      if (initialData) {
-        // await axios.post(`/api/products/edit-product/${initialData._id}`, data);
-      } else {
-        // const res = await axios.post(`/api/products/create-product`, data);
-        // console.log("product", res);
+  const categoryId = useWatch({
+    control: form.control,
+    name: 'categoryId',
+  });
+
+  const onSubmit = async (data: ProductSchemaType) => {
+    startTransition(async () => {
+      try {
+        const response = await fetch(ROUTES.PRODUCT, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data),
+        });
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        toast({
+          title: 'Success',
+          description: 'Product created successfully',
+        });
+        router.refresh();
+        router.push(PAGES.DASHBOARD.PRODUCTS);
+      } catch (error) {
+        console.error('Error:', error);
       }
-      router.refresh();
-      router.push(`/dashboard/products`);
-      toast({
-        variant: 'destructive',
-        title: 'Uh oh! Something went wrong.',
-        description: 'There was a problem with your request.',
-      });
-    } catch (error: any) {
-      toast({
-        variant: 'destructive',
-        title: 'Uh oh! Something went wrong.',
-        description: 'There was a problem with your request.',
-      });
-    } finally {
-      setLoading(false);
-    }
+    });
   };
-
-  const onDelete = async () => {
-    try {
-      setLoading(true);
-      //   await axios.delete(`/api/${params.storeId}/products/${params.productId}`);
-      router.refresh();
-      router.push(`/${params.storeId}/products`);
-    } catch (error: any) {
-    } finally {
-      setLoading(false);
-      setOpen(false);
-    }
-  };
-
-  const triggerImgUrlValidation = () => form.trigger('imgUrl');
 
   return (
-    <>
-      {/* <AlertModal
-        isOpen={open}
-        onClose={() => setOpen(false)}
-        onConfirm={onDelete}
-        loading={loading}
-      /> */}
-      <div className="flex items-center justify-between">
-        <Heading title={title} description={description} />
-        {initialData && (
-          <Button
-            disabled={loading}
-            variant="destructive"
-            size="sm"
-            onClick={() => setOpen(true)}
-          >
-            <Trash className="h-4 w-4" />
-          </Button>
-        )}
-      </div>
-      <Separator />
-      <Form {...form}>
-        <form
-          onSubmit={form.handleSubmit(onSubmit)}
-          className="w-full space-y-8"
-        >
+    <FormProvider {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-8">
+        <FormField
+          control={form.control}
+          name="imageLinks"
+          render={() => <Uploader maximum={6} />}
+        />
+        <Card className="gap-8 p-5 py-8 md:grid md:grid-cols-3">
+          <CardTitle className="col-span-3">Details</CardTitle>
           <FormField
+            name="title"
             control={form.control}
-            name="imgUrl"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Images</FormLabel>
+                <FormLabel required>Title</FormLabel>
                 <FormControl>
-                  <FileUpload
-                    onChange={field.onChange}
-                    value={field.value}
-                    onRemove={field.onChange}
+                  <Input
+                    disabled={loading}
+                    placeholder="Product name"
+                    {...field}
                   />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
-          <div className="gap-8 md:grid md:grid-cols-3">
-            <FormField
-              control={form.control}
-              name="name"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Name</FormLabel>
-                  <FormControl>
-                    <Input
-                      disabled={loading}
-                      placeholder="Product name"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="description"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Description</FormLabel>
-                  <FormControl>
-                    <Input
-                      disabled={loading}
-                      placeholder="Product description"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="price"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Price</FormLabel>
-                  <FormControl>
-                    <Input type="number" disabled={loading} {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="category"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Category</FormLabel>
-                  <Select
+          <FormField
+            name="price"
+            control={form.control}
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel required>Price</FormLabel>
+                <FormControl>
+                  <Input
+                    {...field}
+                    placeholder="price"
+                    type="number"
                     disabled={loading}
+                    onChange={(event) =>
+                      field.onChange(parseFloat(event.target.value))
+                    }
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            name="categoryId"
+            control={form.control}
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel required>Category</FormLabel>
+                <Select
+                  disabled={loading}
+                  onValueChange={field.onChange}
+                  value={field.value}
+                  defaultValue={field.value}
+                >
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue
+                        defaultValue={field.value}
+                        placeholder="Select a category"
+                      />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {categories.map((category) => (
+                      <SelectItem key={category.id} value={category.id!}>
+                        {category.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            name="subCategoryId"
+            control={form.control}
+            render={({ field }) => {
+              const sub = categories?.find((c: any) => c.id === categoryId);
+              return (
+                <FormItem>
+                  <FormLabel required>Sub Category</FormLabel>
+                  <Select
+                    disabled={loading || !sub?.id}
                     onValueChange={field.onChange}
                     value={field.value}
                     defaultValue={field.value}
@@ -246,29 +181,310 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                       <SelectTrigger>
                         <SelectValue
                           defaultValue={field.value}
-                          placeholder="Select a category"
+                          placeholder="Select subcategory"
                         />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      {/* @ts-ignore  */}
-                      {categories.map((category) => (
-                        <SelectItem key={category._id} value={category._id}>
-                          {category.name}
+                      {sub?.subCategories.map((sub) => (
+                        <SelectItem key={sub.id} value={sub.id!}>
+                          {sub.name}
                         </SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
                   <FormMessage />
                 </FormItem>
-              )}
-            />
-          </div>
-          <Button disabled={loading} className="ml-auto" type="submit">
-            {action}
+              );
+            }}
+          />
+
+          <FormField
+            name="discountId"
+            control={form.control}
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Discount</FormLabel>
+                <Select
+                  disabled={loading}
+                  onValueChange={field.onChange}
+                  value={field.value || ''}
+                  defaultValue={field.value || ''}
+                >
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue
+                        defaultValue={field.value || ''}
+                        placeholder="Select Campaign"
+                      />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {discounts.map((discount) => (
+                      <SelectItem key={discount.id} value={discount.id!}>
+                        {`${discount.name} | ${discount.discountPercent}`}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            name="stock"
+            control={form.control}
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel required>Stock</FormLabel>
+                <FormControl>
+                  <Input
+                    {...field}
+                    placeholder="stock product"
+                    type="number"
+                    disabled={loading}
+                    onChange={(event) =>
+                      field.onChange(Number(event.target.value))
+                    }
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            name="description"
+            control={form.control}
+            render={({ field }) => (
+              <FormItem className="col-span-3">
+                <FormLabel required>Description</FormLabel>
+                <FormControl>
+                  <Textarea
+                    rows={10}
+                    disabled={loading}
+                    placeholder="Product description"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </Card>
+
+        {/* other information */}
+        <Card className="gap-8 p-5 py-8 md:grid md:grid-cols-3">
+          <CardTitle className="col-span-3">Others Info</CardTitle>
+
+          <FormField
+            name="insights.productCost"
+            control={form.control}
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel required>Product Cost</FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder="Product sourcing cost"
+                    type="number"
+                    disabled={loading}
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            name="insights.standardLevel"
+            control={form.control}
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Standard Level</FormLabel>
+                <Select
+                  disabled={loading}
+                  onValueChange={field.onChange}
+                  value={field.value}
+                  defaultValue={standardOptions[1]}
+                >
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue
+                        defaultValue={field.value}
+                        placeholder="Select Standard Level"
+                      />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {standardOptions.map((std) => (
+                      <SelectItem key={std} value={std}>
+                        {std}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            name="insights.notes"
+            control={form.control}
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Admin note</FormLabel>
+                <FormControl>
+                  <Input
+                    {...field}
+                    disabled={loading}
+                    placeholder="Notes"
+                    value={field.value || ''}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </Card>
+
+        <Card className="gap-8 p-5 py-8 md:grid md:grid-cols-3">
+          <CardTitle className="col-span-3">Supplier</CardTitle>
+          <FormField
+            name="insights.supplier.name"
+            control={form.control}
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel required>Spokesperson</FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder="Name"
+                    type="text"
+                    disabled={loading}
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            name="insights.supplier.company"
+            control={form.control}
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel required>Company</FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder="Company"
+                    type="text"
+                    disabled={loading}
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            name="insights.supplier.phone"
+            control={form.control}
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel required>Phone</FormLabel>
+                <FormControl>
+                  <Input
+                    {...field}
+                    disabled={loading}
+                    placeholder="Phone"
+                    value={field.value || ''}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            name="insights.supplier.email"
+            control={form.control}
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel required>Email</FormLabel>
+                <FormControl>
+                  <Input
+                    {...field}
+                    disabled={loading}
+                    placeholder="Email"
+                    value={field.value || ''}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            name="insights.supplier.address"
+            control={form.control}
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel required>Address</FormLabel>
+                <FormControl>
+                  <Input
+                    {...field}
+                    disabled={loading}
+                    placeholder="Address"
+                    value={field.value || ''}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="insights.supplier.others"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Remarks</FormLabel>
+                <FormControl>
+                  <Input
+                    {...field}
+                    disabled={loading}
+                    placeholder="Additional notes..."
+                    value={field.value || ''}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </Card>
+        <div className="flex justify-end space-x-3">
+          <Button
+            disabled={loading}
+            variant="outline"
+            className="flex gap-2"
+            type="submit"
+          >
+            <CaretLeftIcon />
+            Back
           </Button>
-        </form>
-      </Form>
-    </>
+          <Button
+            isLoading={loading}
+            disabled={loading}
+            className="ml-auto"
+            type="submit"
+          >
+            {initialData ? 'Save changes' : 'Create'}
+          </Button>
+        </div>
+      </form>
+    </FormProvider>
   );
 };
