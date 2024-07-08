@@ -1,10 +1,11 @@
 'use client';
 
-import { CompleteProduct } from '@/server/schema';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { CompleteProduct } from '@/server/schema';
 
+import { PAGES } from '@/config/pages';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -17,7 +18,8 @@ import {
 } from '@/components/ui/carousel';
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { PAGES } from '@/config/pages';
+
+import EmblaCarousel from '../carousel/embla-carousel';
 
 export default function ProductDetails({
   details,
@@ -32,23 +34,10 @@ export default function ProductDetails({
     <div className="container mx-auto px-4 py-12 md:px-6">
       <div className="grid gap-8 md:grid-cols-2 lg:gap-12">
         <div>
-          <Carousel className="overflow-hidden rounded-lg">
-            <CarouselContent>
-              {details.attachments?.map((item) => (
-                <CarouselItem key={item.id}>
-                  <Image
-                    src={item.link}
-                    width={600}
-                    height={600}
-                    alt="Product Image"
-                    className="aspect-square object-cover"
-                  />
-                </CarouselItem>
-              ))}
-            </CarouselContent>
-            <CarouselPrevious />
-            <CarouselNext />
-          </Carousel>
+          <EmblaCarousel
+            slides={details.attachments}
+            options={{ dragFree: true, loop: true }}
+          />
         </div>
         <div className="grid gap-6">
           <div>
@@ -199,28 +188,29 @@ export default function ProductDetails({
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3">
           {recommended?.map((product) => {
             return (
-              <Card key={product.id} className="group">
-                <Link
-                  href={PAGES.PRODUCT_DETAIL(product.id!)}
-                  className="absolute inset-0 z-10"
-                  prefetch={false}
-                >
-                  <span className="sr-only">View</span>
+              <Card key={product.id}>
+                <Link href={PAGES.PRODUCT_DETAIL(product.id!)} prefetch={false}>
+                  <Image
+                    src={product.attachments?.[0]?.link}
+                    onClick={() =>
+                      router.push(PAGES.PRODUCT_DETAIL(product.id!))
+                    }
+                    width={400}
+                    height={400}
+                    alt="Product Image"
+                    className="aspect-square rounded-t-lg object-cover transition-opacity group-hover:opacity-50"
+                  />
                 </Link>
-
-                <Image
-                  src={product.attachments?.[0]?.link}
-                  onClick={() => router.push(PAGES.PRODUCT_DETAIL(product.id!))}
-                  width={400}
-                  height={400}
-                  alt="Product Image"
-                  className="aspect-square rounded-t-lg object-cover transition-opacity group-hover:opacity-50"
-                />
                 <CardContent className="p-4">
-                  <h3 className="text-lg font-medium">{product.title}</h3>
-                  <p className="text-sm text-muted-foreground">
-                    {product.description.slice(0, 100)}...
-                  </p>
+                  <Link
+                    href={PAGES.PRODUCT_DETAIL(product.id!)}
+                    prefetch={false}
+                  >
+                    <h3 className="text-lg font-medium">{product.title}</h3>
+                    <p className="text-sm text-muted-foreground">
+                      {product.description.slice(0, 100)}...
+                    </p>
+                  </Link>
                   <div className="mt-2 flex items-center justify-between">
                     <div className="text-lg font-semibold">$69.99</div>
                     <Button size="sm">Add to Cart</Button>
@@ -252,4 +242,24 @@ function StarIcon(props) {
       <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
     </svg>
   );
+}
+
+{
+  /* <Carousel className="overflow-hidden rounded-lg">
+            <CarouselContent>
+              {details.attachments?.map((item) => (
+                <CarouselItem key={item.id}>
+                  <Image
+                    src={item.link}
+                    width={600}
+                    height={600}
+                    alt="Product Image"
+                    className="aspect-square object-cover"
+                  />
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+            <CarouselPrevious />
+            <CarouselNext />
+          </Carousel> */
 }

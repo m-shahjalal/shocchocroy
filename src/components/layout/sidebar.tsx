@@ -1,5 +1,7 @@
 'use client';
 
+import Image from 'next/image';
+import Link from 'next/link';
 import TangailIcon from '@/assets/icons/002-woman-1.png';
 import ThreePcsIcon from '@/assets/icons/003-saree.png';
 import MonipuriIcon from '@/assets/icons/006-saree-2.png';
@@ -7,8 +9,6 @@ import JamdaniIcon from '@/assets/icons/014-bracelet.png';
 import { cn } from '@/utils/cn';
 import { sidebarAtom } from '@/utils/store';
 import { useAtom } from 'jotai';
-import Image from 'next/image';
-import Link from 'next/link';
 
 import {
   Accordion,
@@ -35,35 +35,35 @@ const menuItems = [
     subCategory: [
       {
         label: 'Cotton',
-        href: 'cotton',
+        href: '/tangail-tant/cotton',
       },
       {
         label: 'Half Silk',
-        href: 'half-silk',
+        href: '/tangail-tant/half-silk',
       },
       {
         label: 'Silk',
-        href: 'silk',
+        href: '/tangail-tant/silk',
       },
       {
         label: 'Semi maslin',
-        href: 'semi-silk',
+        href: '/tangail-tant/semi-silk',
       },
       {
         label: 'Maslin',
-        href: 'maslin',
+        href: '/tangail-tant/maslin',
       },
       {
         label: ' Handloom Cotton',
-        href: 'handloom-cotton',
+        href: '/tangail-tant/handloom-cotton',
       },
       {
         label: 'Handloom Halfsilk',
-        href: 'handloom-half-silk',
+        href: '/tangail-tant/handloom-half-silk',
       },
       {
         label: 'Tantuj',
-        href: 'tantuj',
+        href: '/tangail-tant/tantuj',
       },
     ],
   },
@@ -84,11 +84,11 @@ const menuItems = [
     subCategory: [
       {
         label: 'Academi Monipuri',
-        href: 'academi-monipuri',
+        href: '/monipuri/academi-monipuri',
       },
       {
         label: 'Handloom Monipuri',
-        href: 'handloom-monipuri',
+        href: '/monipuri/handloom-monipuri',
       },
     ],
   },
@@ -109,15 +109,15 @@ const menuItems = [
     subCategory: [
       {
         label: ' Cotton Jamdani',
-        href: 'cotton-jamdani',
+        href: '/jamdani/cotton-jamdani',
       },
       {
         label: 'Halfsik Jamdani',
-        href: 'half-silk-jamdani',
+        href: '/jamdani/half-silk-jamdani',
       },
       {
         label: 'Silk Jamdani',
-        href: 'silk-jamdani',
+        href: '/jamdani/silk-jamdani',
       },
     ],
   },
@@ -138,23 +138,23 @@ const menuItems = [
     subCategory: [
       {
         label: 'Cotton',
-        href: 'cotton',
+        href: '/three-pcs/cotton',
       },
       {
         label: 'Silk',
-        href: 'silk',
+        href: '/three-pcs/silk',
       },
       {
         label: 'Batik',
-        href: 'batik",',
+        href: '/three-pcs/batik",',
       },
       {
         label: 'Embroidery',
-        href: 'embroidery',
+        href: '/three-pcs/embroidery',
       },
       {
         label: 'Karchupi',
-        href: 'karchupi',
+        href: '/three-pcs/karchupi',
       },
     ],
   },

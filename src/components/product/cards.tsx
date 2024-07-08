@@ -1,9 +1,8 @@
 'use client';
 
-import { Key } from 'react';
+import { CompleteProduct } from '@/server/schema';
 
 import SingleCard from './single-card';
-import { CompleteProduct } from '@/server/schema';
 
 export const ProductCard = ({ products }: { products: CompleteProduct[] }) => {
   return (

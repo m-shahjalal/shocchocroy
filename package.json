@@ -60,6 +60,8 @@
     "dotenv": "^16.4.5",
     "drizzle-orm": "^0.31.2",
     "drizzle-zod": "^0.5.1",
+    "embla-carousel": "^8.1.6",
+    "embla-carousel-autoplay": "^8.1.6",
     "embla-carousel-react": "^8.1.6",
     "jotai": "https://pkg.csb.dev/pmndrs/jotai/commit/74da26f9/jotai/_pkg.tgz",
     "lucide-react": "^0.396.0",

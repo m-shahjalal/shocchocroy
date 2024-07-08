@@ -1,42 +1,60 @@
-import React from 'react';
-import Link from 'next/link';
+import { Fragment } from 'react';
 import { cn } from '@/utils/cn';
-import { ChevronRightIcon } from '@radix-ui/react-icons';
 
-type BreadCrumbType = {
-  title: string;
-  link: string;
-};
+import {
+  Breadcrumb,
+  BreadcrumbEllipsis,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from '@/components/ui/breadcrumb';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 
-type BreadCrumbPropsType = {
-  items: BreadCrumbType[];
-};
+type Breadcrumb = { link?: string; title: string }[];
 
-export default function BreadCrumb({ items }: BreadCrumbPropsType) {
+export function BreadCRM({ items }: { items: Breadcrumb }) {
   return (
-    <div className="mb-4 flex items-center space-x-1 text-sm text-muted-foreground">
-      <Link
-        href={'/dashboard'}
-        className="overflow-hidden text-ellipsis whitespace-nowrap"
-      >
-        Dashboard
-      </Link>
-      {items?.map((item: BreadCrumbType, index: number) => (
-        <React.Fragment key={item.title}>
-          <ChevronRightIcon className="h-4 w-4" />
-          <Link
-            href={item.link}
-            className={cn(
-              'font-medium',
-              index === items.length - 1
-                ? 'pointer-events-none text-foreground'
-                : 'text-muted-foreground'
-            )}
-          >
-            {item.title}
-          </Link>
-        </React.Fragment>
-      ))}
-    </div>
+    <Breadcrumb className="mt-4">
+      <BreadcrumbList className="w-fit px-2 py-1">
+        {items.map((breadcrumb, index) => (
+          <Fragment key={index}>
+            <BreadcrumbItem
+              className={cn(index === items.length - 1 && 'text-gray-800')}
+            >
+              {breadcrumb.link ? (
+                <BreadcrumbLink href={breadcrumb.link}>
+                  {breadcrumb.title}
+                </BreadcrumbLink>
+              ) : (
+                <BreadcrumbPage>{breadcrumb.title}</BreadcrumbPage>
+              )}
+            </BreadcrumbItem>
+            {index < items.length - 1 && <BreadcrumbSeparator />}
+          </Fragment>
+        ))}
+        {items.length > 3 && (
+          <BreadcrumbItem>
+            <DropdownMenu>
+              <DropdownMenuTrigger className="flex items-center gap-1">
+                <BreadcrumbEllipsis className="h-4 w-4" />
+                <span className="sr-only">Toggle menu</span>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="start">
+                <DropdownMenuItem>Documentation</DropdownMenuItem>
+                <DropdownMenuItem>Themes</DropdownMenuItem>
+                <DropdownMenuItem>GitHub</DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </BreadcrumbItem>
+        )}
+      </BreadcrumbList>
+    </Breadcrumb>
   );
 }
