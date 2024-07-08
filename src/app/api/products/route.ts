@@ -28,7 +28,7 @@ export const GET = async () => {
       subCategory: true,
       discount: true,
       category: true,
-      attachment: true,
+      attachments: true,
     },
   });
   return new Response(JSON.stringify(products));

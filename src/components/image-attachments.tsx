@@ -23,8 +23,6 @@ import { Card, CardTitle } from './ui/card';
 
 const Uploader = ({ maximum }: { maximum: number }) => {
   const {
-    setValue,
-    getValues,
     control,
     formState: { errors },
   } = useFormContext<ProductSchemaType>();
@@ -37,7 +35,7 @@ const Uploader = ({ maximum }: { maximum: number }) => {
 
   const uppy = useMemo(() => {
     const handlePathNames = (_file: any, response: SuccessResponse) => {
-      const path = response.body.result?.data?.fullPath;
+      const path = response.body.result?.data?.path;
       if (path) append(path);
     };
 

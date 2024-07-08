@@ -66,7 +66,7 @@ export const productRelations = relations(product, ({ one, many }) => ({
     references: [productInsight.productId],
   }),
 
-  attachment: many(attachment),
+  attachments: many(attachment),
 }));
 
 export type ProductInsert = typeof product.$inferInsert;

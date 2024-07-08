@@ -14,6 +14,11 @@ const nextConfig = {
         hostname: 'fakestoreapi.com',
         pathname: '/img/*',
       },
+      {
+        protocol: 'https',
+        hostname: 'dnmxbnxqqudcnnxusadg.supabase.co',
+        pathname: '/storage/**/*',
+      },
     ],
   },
 };

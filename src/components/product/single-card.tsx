@@ -1,6 +1,7 @@
 import { CompleteProduct } from '@/server/schema';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 import { PAGES } from '@/config/pages';
 
@@ -14,7 +15,8 @@ import {
 } from '../ui/card';
 
 const SingleCard = ({ data }: { data: CompleteProduct }) => {
-  console.log(data);
+  const router = useRouter();
+
   return (
     <Card key={data.id} className="flex flex-col">
       <CardHeader>
@@ -23,9 +25,13 @@ const SingleCard = ({ data }: { data: CompleteProduct }) => {
         </CardTitle>
       </CardHeader>
 
-      <CardContent className="flex flex-1 flex-col items-center justify-center gap-2">
+      <CardContent
+        onClick={() => router.push(PAGES.PRODUCT_DETAIL(data.id!))}
+        className="flex flex-1 cursor-pointer flex-col items-center justify-center gap-2"
+      >
         <Image
-          src={(data.attachments?.[0].link)}
+          className="h-full w-full"
+          src={data.attachments?.[0].link}
           width={200}
           height={200}
           alt="product"
