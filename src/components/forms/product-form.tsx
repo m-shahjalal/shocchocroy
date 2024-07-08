@@ -1,5 +1,7 @@
 'use client';
 
+import { useTransition } from 'react';
+import { useRouter } from 'next/navigation';
 import { CompleteCategory, CompleteDiscount } from '@/server/schema';
 import { standardOptions } from '@/server/schema/enum';
 import {
@@ -8,10 +10,10 @@ import {
 } from '@/validator/product-form-schema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { CaretLeftIcon } from '@radix-ui/react-icons';
-import { useRouter } from 'next/navigation';
-import { useTransition } from 'react';
 import { FormProvider, useForm, useWatch } from 'react-hook-form';
 
+import { PAGES } from '@/config/pages';
+import { ROUTES } from '@/config/routes';
 import { Button } from '@/components/ui/button';
 import {
   FormControl,
@@ -28,8 +30,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { PAGES } from '@/config/pages';
-import { ROUTES } from '@/config/routes';
 
 import Uploader from '../image-attachments';
 import { Card, CardTitle } from '../ui/card';
@@ -221,8 +221,13 @@ export const ProductForm = ({
                   </FormControl>
                   <SelectContent>
                     {discounts.map((discount) => (
-                      <SelectItem key={discount.id} value={discount.id!}>
-                        {`${discount.name} | ${discount.discountPercent}`}
+                      <SelectItem
+                        className="whitespace-nowrap"
+                        key={discount.id}
+                        value={discount.id!}
+                      >
+                        {`${discount.discountPercent < 10 ? `0${discount.discountPercent}` : discount.discountPercent}%`}
+                        <span className='pl-4'>{discount.name}</span>
                       </SelectItem>
                     ))}
                   </SelectContent>

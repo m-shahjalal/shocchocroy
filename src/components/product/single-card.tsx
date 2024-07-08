@@ -1,7 +1,9 @@
+import { CompleteProduct } from '@/server/schema';
+import { cartAtom } from '@/utils/store';
+import { useSetAtom } from 'jotai';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { CompleteProduct } from '@/server/schema';
 
 import { PAGES } from '@/config/pages';
 
@@ -10,6 +12,24 @@ import { Card, CardContent } from '../ui/card';
 
 const SingleCard = ({ data }: { data: CompleteProduct }) => {
   const router = useRouter();
+  const setCartItem = useSetAtom(cartAtom);
+
+  const handleAddToCart = () => {
+    setCartItem((prevCart) => {
+      const existingItem = prevCart.items.find(
+        (item) => item.data.id === data.id
+      );
+
+      if (existingItem) {
+        existingItem.quantity++;
+        return prevCart;
+      }
+      return {
+        ...prevCart,
+        items: [...prevCart.items, { data, quantity: 1 }],
+      };
+    });
+  };
 
   return (
     <Card key={data.id}>
@@ -32,7 +52,9 @@ const SingleCard = ({ data }: { data: CompleteProduct }) => {
         </Link>
         <div className="mt-2 flex items-center justify-between">
           <div className="text-lg font-semibold">$69.99</div>
-          <Button size="sm">Add to Cart</Button>
+          <Button onClick={handleAddToCart} size="sm">
+            Add to Cart
+          </Button>
         </div>
       </CardContent>
     </Card>

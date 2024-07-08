@@ -13,8 +13,8 @@ export default async function Page() {
 
   const response = await fetch(buildAPIUrl(ROUTES.CATEGORY));
   const categories = await response.json();
-  const discountResponse = await fetch(buildAPIUrl(ROUTES.DISCOUNT))
-  const discount = await discountResponse.json()
+  const discountResponse = await fetch(buildAPIUrl(ROUTES.DISCOUNT));
+  const discount = await discountResponse.json();
 
   return (
     <ScrollArea className="h-full">

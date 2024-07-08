@@ -1,8 +1,7 @@
 'use client';
 
-import Link from 'next/link';
 import { logout } from '@/utils/handle-auth';
-import { sidebarAtom, cartAtom } from '@/utils/store';
+import { cartAtom, sidebarAtom } from '@/utils/store';
 import { DropdownMenuItem } from '@radix-ui/react-dropdown-menu';
 import { useAtom, useAtomValue } from 'jotai';
 import {
@@ -15,10 +14,11 @@ import {
   User as UserIcon,
   X,
 } from 'lucide-react';
+import Link from 'next/link';
 
+import { Input } from '@/components/ui/input';
 import { PAGES } from '@/config/pages';
 import useAuth from '@/hooks/use-auth';
-import { Input } from '@/components/ui/input';
 
 import { Button } from '../ui/button';
 import {
@@ -31,7 +31,7 @@ import {
 
 export default function Header() {
   const [sidebarState, toggleSidebar] = useAtom(sidebarAtom);
-  const cartLen = useAtomValue(cartAtom)?.items?.length || 0
+  const cartLen = useAtomValue(cartAtom)?.items?.length || 0;
 
   const handleSidebar = () => {
     toggleSidebar({
@@ -68,9 +68,11 @@ export default function Header() {
 
         <Link className="relative" href={PAGES.CART} prefetch={false}>
           <ShoppingBasket className="h-10 w-10 rounded-full bg-blue-500 p-2 text-gray-200" />
-          {cartLen ? <span className="absolute right-0 top-0 -mr-2 -mt-2 rounded-full bg-green-500 px-2 py-1 text-xs font-bold text-gray-100">
-            {cartLen}
-          </span> : null}
+          {cartLen ? (
+            <span className="absolute right-0 top-0 -mr-2 -mt-2 rounded-full bg-green-500 px-2 py-1 text-xs font-bold text-gray-100">
+              {cartLen}
+            </span>
+          ) : null}
         </Link>
       </div>
     </header>
@@ -109,8 +111,7 @@ const UserDropdown = () => {
   const user = useAuth();
 
   const handleLogout = async () => {
-    const data = await logout();
-    console.log('data', data);
+    await logout();
   };
 
   return (

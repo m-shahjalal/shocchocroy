@@ -4,18 +4,13 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { CompleteProduct } from '@/server/schema';
+import { cartAtom } from '@/utils/store';
+import { useAtom } from 'jotai';
 
 import { PAGES } from '@/config/pages';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from '@/components/ui/carousel';
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 
@@ -29,6 +24,24 @@ export default function ProductDetails({
   recommended: CompleteProduct[];
 }) {
   const router = useRouter();
+  const [cartItem, setCartItem] = useAtom(cartAtom);
+
+  const handleAddToCart = () => {
+    setCartItem((prevCart) => {
+      const existingItem = prevCart.items.find(
+        (item) => item.data.id === details.id
+      );
+
+      if (existingItem) {
+        existingItem.quantity++;
+        return prevCart;
+      }
+      return {
+        ...prevCart,
+        items: [...prevCart.items, { data: details, quantity: 1 }],
+      };
+    });
+  };
 
   return (
     <div className="container mx-auto px-4 py-12 md:px-6">
@@ -213,7 +226,9 @@ export default function ProductDetails({
                   </Link>
                   <div className="mt-2 flex items-center justify-between">
                     <div className="text-lg font-semibold">$69.99</div>
-                    <Button size="sm">Add to Cart</Button>
+                    <Button onClick={handleAddToCart} size="sm">
+                      Add to Cart
+                    </Button>
                   </div>
                 </CardContent>
               </Card>

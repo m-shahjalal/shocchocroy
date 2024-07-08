@@ -1,3 +1,4 @@
+import { CompleteProduct } from '@/server/schema';
 import { atom } from 'jotai';
 
 export const sidebarAtom = atom({
@@ -5,5 +6,5 @@ export const sidebarAtom = atom({
 });
 
 export const cartAtom = atom({
-  items: [],
+  items: [] as { data: CompleteProduct; quantity: number }[],
 });

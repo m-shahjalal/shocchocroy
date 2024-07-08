@@ -12,6 +12,7 @@ import {
 export const category = pgTable('category', {
   id: dbTableId(),
   name: varchar('name', { length: 255 }).notNull(),
+  slug: varchar('slug', { length: 255 }).notNull(),
   description: varchar('description'),
 
   createdAt: timestamp('created_at').notNull(),

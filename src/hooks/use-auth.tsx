@@ -1,8 +1,8 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import { me } from '@/utils/handle-auth';
 import { User } from '@supabase/supabase-js';
+import { useEffect, useState } from 'react';
 
 const useAuth = () => {
   const [user, setUser] = useState<User | null>(null);
@@ -11,7 +11,7 @@ const useAuth = () => {
     me()
       .then((data) => setUser(data.data.user))
       .catch(console.error);
-  });
+  }, []);
 
   return user;
 };

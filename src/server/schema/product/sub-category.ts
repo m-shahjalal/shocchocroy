@@ -8,6 +8,7 @@ import { product } from './product';
 export const subCategory = pgTable('sub_category', {
   id: dbTableId(),
   name: varchar('name', { length: 255 }).notNull(),
+  slug: varchar('slug', { length: 255 }).notNull(),
   description: varchar('description'),
 
   parentId: dbTableId('parent_id')

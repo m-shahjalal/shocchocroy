@@ -14,9 +14,10 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { AlertModal } from '@/components/modal/alert-modal';
+import { CompleteProduct } from '@/server/schema';
 
 interface CellActionProps {
-  data: Employee;
+  data: CompleteProduct;
 }
 
 export const CellAction: React.FC<CellActionProps> = ({ data }) => {
