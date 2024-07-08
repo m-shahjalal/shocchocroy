@@ -19,7 +19,7 @@ import {
 
 type Breadcrumb = { link?: string; title: string }[];
 
-export function BreadCRM({ items }: { items: Breadcrumb }) {
+export default function BreadCRM({ items }: { items: Breadcrumb }) {
   return (
     <Breadcrumb className="mt-4">
       <BreadcrumbList className="w-fit px-2 py-1">

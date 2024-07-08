@@ -2,9 +2,9 @@
 
 import Link from 'next/link';
 import { logout } from '@/utils/handle-auth';
-import { sidebarAtom } from '@/utils/store';
+import { sidebarAtom, cartAtom } from '@/utils/store';
 import { DropdownMenuItem } from '@radix-ui/react-dropdown-menu';
-import { useAtom } from 'jotai';
+import { useAtom, useAtomValue } from 'jotai';
 import {
   LogOut,
   Menu,
@@ -31,6 +31,7 @@ import {
 
 export default function Header() {
   const [sidebarState, toggleSidebar] = useAtom(sidebarAtom);
+  const cartLen = useAtomValue(cartAtom)?.items?.length || 0
 
   const handleSidebar = () => {
     toggleSidebar({
@@ -65,11 +66,11 @@ export default function Header() {
         <Nav />
         <UserDropdown />
 
-        <Link className="relative" href="#" prefetch={false}>
+        <Link className="relative" href={PAGES.CART} prefetch={false}>
           <ShoppingBasket className="h-10 w-10 rounded-full bg-blue-500 p-2 text-gray-200" />
-          <span className="absolute right-0 top-0 -mr-2 -mt-2 rounded-full bg-green-500 px-2 py-1 text-xs font-bold text-gray-100">
-            3
-          </span>
+          {cartLen ? <span className="absolute right-0 top-0 -mr-2 -mt-2 rounded-full bg-green-500 px-2 py-1 text-xs font-bold text-gray-100">
+            {cartLen}
+          </span> : null}
         </Link>
       </div>
     </header>

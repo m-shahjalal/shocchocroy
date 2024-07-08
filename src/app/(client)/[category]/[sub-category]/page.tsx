@@ -1,7 +1,7 @@
 import { buildAPIUrl } from '@/utils/fetcher';
 
 import { ROUTES } from '@/config/routes';
-import { BreadCRM } from '@/components/breadcrumb';
+import BreadCRM from '@/components/breadcrumb';
 import ProductCard from '@/components/product/cards';
 
 export default async function SubCategoryPage({ params }) {

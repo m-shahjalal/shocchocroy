@@ -6,6 +6,7 @@ export const PAGES = {
   RESET_PASSWORD: '/reset-password',
   ERROR: '/error',
   PRODUCTS: '/products',
+  CART: '/cart',
   PRODUCT_DETAIL: (slug: string) => `/products/${slug}`,
 
   DASHBOARD: {
