@@ -1,10 +1,12 @@
 'use client';
 
-import { useState } from 'react';
-import { useParams, useRouter } from 'next/navigation';
+import { deleteProduct } from '@/server/action/product.action';
+import { CompleteProduct } from '@/server/schema';
 import { Edit, MoreHorizontal, Trash } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { useState, useTransition } from 'react';
 
-import { Employee } from '@/config/data';
+import { AlertModal } from '@/components/modal/alert-modal';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -13,27 +15,35 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { AlertModal } from '@/components/modal/alert-modal';
-import { CompleteProduct } from '@/server/schema';
 
 interface CellActionProps {
   data: CompleteProduct;
 }
 
 export const CellAction: React.FC<CellActionProps> = ({ data }) => {
-  const [loading, setLoading] = useState(false);
+  const [isPending, startTransition] = useTransition();
   const [open, setOpen] = useState(false);
   const router = useRouter();
 
-  const onConfirm = async () => {};
+  const handleDelete = () => {
+    startTransition(async () => {
+      try {
+        const result = await deleteProduct([data.id!]);
+
+        if (result) {
+          router.refresh();
+        }
+      } catch (error) {}
+    });
+  };
 
   return (
     <>
       <AlertModal
         isOpen={open}
         onClose={() => setOpen(false)}
-        onConfirm={onConfirm}
-        loading={loading}
+        onConfirm={handleDelete}
+        loading={isPending}
       />
       <DropdownMenu modal={false}>
         <DropdownMenuTrigger asChild>
@@ -46,7 +56,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
 
           <DropdownMenuItem
-            onClick={() => router.push(`/dashboard/user/${data.id}`)}
+            onClick={() => router.push(`/dashboard/product/${data.id}/edit`)}
           >
             <Edit className="mr-2 h-4 w-4" /> Update
           </DropdownMenuItem>

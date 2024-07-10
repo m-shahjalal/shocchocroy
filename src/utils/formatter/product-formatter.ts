@@ -5,7 +5,7 @@ import { createId } from '@paralleldrive/cuid2';
 import { User } from '@supabase/supabase-js';
 
 export const productData = (user: User, inputs: ProductSchemaType) => {
-  const productId = createId();
+  const productId = inputs.id ?? createId();
 
   const product: ProductInsert = {
     id: productId,

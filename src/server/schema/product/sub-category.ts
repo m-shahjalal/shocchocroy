@@ -19,16 +19,13 @@ export const subCategory = pgTable('sub_category', {
     }),
 });
 
-export const subCategoryRelations = relations(subCategory, ({ one }) => ({
+export const subCategoryRelations = relations(subCategory, ({ one, many }) => ({
   parent: one(category, {
     fields: [subCategory.parentId],
     references: [category.id],
   }),
 
-  product: one(product, {
-    fields: [subCategory.id],
-    references: [product.subCategoryId],
-  }),
+  products: many(product),
 }));
 
 export type NewSubCategory = typeof subCategory.$inferInsert;

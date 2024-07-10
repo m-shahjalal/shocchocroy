@@ -14,7 +14,7 @@ type Supplier = {
   others: string;
 }[];
 
-export const productInsight = pgTable('product_sku', {
+export const productInsight = pgTable('product_insight', {
   id: dbTableId(),
 
   productId: dbTableId('product_id')

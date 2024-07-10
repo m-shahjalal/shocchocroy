@@ -1,18 +1,18 @@
 'use client';
 
-import Image from 'next/image';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { CompleteProduct } from '@/server/schema';
 import { cartAtom } from '@/utils/store';
 import { useAtom } from 'jotai';
+import Image from 'next/image';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
-import { PAGES } from '@/config/pages';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { PAGES } from '@/config/pages';
 
 import EmblaCarousel from '../carousel/embla-carousel';
 
@@ -48,7 +48,7 @@ export default function ProductDetails({
       <div className="grid gap-8 md:grid-cols-2 lg:gap-12">
         <div>
           <EmblaCarousel
-            slides={details.attachments}
+            slides={details.attachments!}
             options={{ dragFree: true, loop: true }}
           />
         </div>
@@ -141,7 +141,9 @@ export default function ProductDetails({
                 {details.price}
               </div>
             </div>
-            <Button size="lg">Add to Cart</Button>
+            <Button onClick={handleAddToCart} size="lg">
+              Add to Cart
+            </Button>
           </div>
         </div>
       </div>
@@ -204,7 +206,7 @@ export default function ProductDetails({
               <Card key={product.id}>
                 <Link href={PAGES.PRODUCT_DETAIL(product.id!)} prefetch={false}>
                   <Image
-                    src={product.attachments?.[0]?.link}
+                    src={product.attachment?.link}
                     onClick={() =>
                       router.push(PAGES.PRODUCT_DETAIL(product.id!))
                     }
@@ -257,24 +259,4 @@ function StarIcon(props) {
       <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
     </svg>
   );
-}
-
-{
-  /* <Carousel className="overflow-hidden rounded-lg">
-            <CarouselContent>
-              {details.attachments?.map((item) => (
-                <CarouselItem key={item.id}>
-                  <Image
-                    src={item.link}
-                    width={600}
-                    height={600}
-                    alt="Product Image"
-                    className="aspect-square object-cover"
-                  />
-                </CarouselItem>
-              ))}
-            </CarouselContent>
-            <CarouselPrevious />
-            <CarouselNext />
-          </Carousel> */
 }

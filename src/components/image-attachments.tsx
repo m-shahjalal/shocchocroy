@@ -1,21 +1,21 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
 import Compressor from '@uppy/compressor';
 import Uppy, { SuccessResponse } from '@uppy/core';
 import ImageEditor from '@uppy/image-editor';
 import { DashboardModal } from '@uppy/react';
 import xhr from '@uppy/xhr-upload';
+import { useMemo, useState } from 'react';
 
 import '@uppy/core/dist/style.css';
 import '@uppy/dashboard/dist/style.css';
 import '@uppy/image-editor/dist/style.css';
 
-import Image from 'next/image';
 import { cn } from '@/utils/cn';
 import { ProductSchemaType } from '@/validator/product-form-schema';
 import { UppyFile } from '@uppy/core';
 import { Upload } from 'lucide-react';
+import Image from 'next/image';
 import { useFieldArray, useFormContext } from 'react-hook-form';
 
 import { Button } from './ui/button';
@@ -37,6 +37,7 @@ const Uploader = ({ maximum }: { maximum: number }) => {
     const handlePathNames = (_file: any, response: SuccessResponse) => {
       const path = response.body.result?.data?.path;
       if (path) append(path);
+      setImages(uppy.getFiles());
     };
 
     return new Uppy({
@@ -61,14 +62,8 @@ const Uploader = ({ maximum }: { maximum: number }) => {
       })
       .use(Compressor)
       .use(xhr, { endpoint: `${process.env.NEXT_PUBLIC_SITE_URL!}/api/upload` })
-      .on('upload-success', handlePathNames)
-      .on('file-added', () => setImages(uppy.getFiles()))
-      .on('file-removed', () => setImages(uppy.getFiles()));
+      .on('upload-success', handlePathNames);
   }, [append, maximum]);
-
-  useEffect(() => {
-    if (uppy.getFiles().length === 0) setImages([]);
-  }, [uppy]);
 
   return (
     <>

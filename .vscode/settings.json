@@ -34,6 +34,7 @@
     "pooler",
     "regtype",
     "schemaname",
+    "setweight",
     "shocchocroy",
     "signup",
     "startdate",
@@ -43,6 +44,8 @@
     "tanstack",
     "Tant",
     "Tantuj",
+    "tsquery",
+    "tsvector",
     "uppy",
     "স্বচ্ছক্রয়",
     "হ্যালো"

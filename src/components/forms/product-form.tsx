@@ -1,7 +1,6 @@
 'use client';
 
-import { useTransition } from 'react';
-import { useRouter } from 'next/navigation';
+import { createProduct } from '@/server/action/product.action';
 import { CompleteCategory, CompleteDiscount } from '@/server/schema';
 import { standardOptions } from '@/server/schema/enum';
 import {
@@ -10,10 +9,10 @@ import {
 } from '@/validator/product-form-schema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { CaretLeftIcon } from '@radix-ui/react-icons';
+import { useRouter } from 'next/navigation';
+import { useTransition } from 'react';
 import { FormProvider, useForm, useWatch } from 'react-hook-form';
 
-import { PAGES } from '@/config/pages';
-import { ROUTES } from '@/config/routes';
 import { Button } from '@/components/ui/button';
 import {
   FormControl,
@@ -30,6 +29,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { PAGES } from '@/config/pages';
 
 import Uploader from '../image-attachments';
 import { Card, CardTitle } from '../ui/card';
@@ -60,16 +60,8 @@ export const ProductForm = ({
   const onSubmit = async (data: ProductSchemaType) => {
     startTransition(async () => {
       try {
-        const response = await fetch(ROUTES.PRODUCT, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(data),
-        });
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
+        const response = await createProduct(data);
+        if (!response?.success) throw new Error(response?.error.message);
         toast({
           title: 'Success',
           description: 'Product created successfully',
@@ -186,7 +178,7 @@ export const ProductForm = ({
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      {sub?.subCategories.map((sub) => (
+                      {sub?.subCategories?.map((sub) => (
                         <SelectItem key={sub.id} value={sub.id!}>
                           {sub.name}
                         </SelectItem>
@@ -227,7 +219,7 @@ export const ProductForm = ({
                         value={discount.id!}
                       >
                         {`${discount.discountPercent < 10 ? `0${discount.discountPercent}` : discount.discountPercent}%`}
-                        <span className='pl-4'>{discount.name}</span>
+                        <span className="pl-4">{discount.name}</span>
                       </SelectItem>
                     ))}
                   </SelectContent>

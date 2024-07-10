@@ -42,7 +42,7 @@ export default function Cart() {
               >
                 <div className="flex items-center gap-4">
                   <Image
-                    src={item.data.attachments?.[0]?.link}
+                    src={item.data.attachment?.link}
                     alt={item.data.title}
                     width={80}
                     height={80}

@@ -1,8 +1,9 @@
-import { buildAPIUrl } from '@/utils/fetcher';
+import { getProducts } from '@/server/action/product.action';
 
-import { ROUTES } from '@/config/routes';
 import ProductCard from '@/components/product/cards';
 
 export default async function Home() {
-  return <ProductCard />;
+  const data = await getProducts();
+
+  return <ProductCard products={(data.success && data.result.data) || []} />;
 }

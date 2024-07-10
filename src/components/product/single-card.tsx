@@ -35,7 +35,7 @@ const SingleCard = ({ data }: { data: CompleteProduct }) => {
     <Card key={data.id}>
       <Link href={PAGES.PRODUCT_DETAIL(data.id!)} prefetch={false}>
         <Image
-          src={data.attachments?.[0]?.link}
+          src={data.attachment?.link}
           onClick={() => router.push(PAGES.PRODUCT_DETAIL(data.id!))}
           width={400}
           height={400}
@@ -47,7 +47,7 @@ const SingleCard = ({ data }: { data: CompleteProduct }) => {
         <Link href={PAGES.PRODUCT_DETAIL(data.id!)} prefetch={false}>
           <h3 className="text-lg font-medium">{data.title}</h3>
           <p className="text-sm text-muted-foreground">
-            {data.description.slice(0, 100)}...
+            {data.description?.slice(0, 100)}...
           </p>
         </Link>
         <div className="mt-2 flex items-center justify-between">

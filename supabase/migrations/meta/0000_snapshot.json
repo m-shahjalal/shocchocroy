@@ -1,5 +1,5 @@
 {
-  "id": "9ffbd3d2-dea7-4e9f-8600-5108da86a274",
+  "id": "31f6451d-260d-4aa0-9025-beae301c3ead",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -18,13 +18,13 @@
           "name": "attachment",
           "type": "varchar",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "attach_id": {
           "name": "attach_id",
           "type": "varchar",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "created_at": {
           "name": "created_at",
@@ -108,6 +108,12 @@
           "primaryKey": false,
           "notNull": true
         },
+        "slug": {
+          "name": "slug",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
         "description": {
           "name": "description",
           "type": "varchar",
@@ -136,7 +142,22 @@
       "indexes": {},
       "foreignKeys": {},
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
+      "uniqueConstraints": {
+        "category_name_unique": {
+          "name": "category_name_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "name"
+          ]
+        },
+        "category_slug_unique": {
+          "name": "category_slug_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "slug"
+          ]
+        }
+      }
     },
     "public.discount": {
       "name": "discount",
@@ -162,7 +183,7 @@
         },
         "discount_percent": {
           "name": "discount_percent",
-          "type": "varchar",
+          "type": "integer",
           "primaryKey": false,
           "notNull": true
         },
@@ -211,7 +232,23 @@
           "notNull": false
         }
       },
-      "indexes": {},
+      "indexes": {
+        "search_discount": {
+          "name": "search_discount",
+          "columns": [
+            {
+              "expression": "(\n      setweight(to_tsvector('english', \"name\"), 'A') ||\n      setweight(to_tsvector('english', \"description\"), 'B')\n  )",
+              "asc": true,
+              "isExpression": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "gin",
+          "with": {}
+        }
+      },
       "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
@@ -244,23 +281,29 @@
           "primaryKey": false,
           "notNull": true
         },
+        "sub_category_id": {
+          "name": "sub_category_id",
+          "type": "varchar(63)",
+          "primaryKey": false,
+          "notNull": true
+        },
         "discount_id": {
           "name": "discount_id",
           "type": "varchar(63)",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         },
-        "size_attribute": {
-          "name": "size_attribute",
+        "size": {
+          "name": "size",
           "type": "varchar(63)",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         },
-        "color_attribute": {
-          "name": "color_attribute",
+        "color": {
+          "name": "color",
           "type": "varchar(63)",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         },
         "price": {
           "name": "price",
@@ -268,8 +311,8 @@
           "primaryKey": false,
           "notNull": true
         },
-        "quantity": {
-          "name": "quantity",
+        "stock": {
+          "name": "stock",
           "type": "integer",
           "primaryKey": false,
           "notNull": true
@@ -318,7 +361,23 @@
           "notNull": false
         }
       },
-      "indexes": {},
+      "indexes": {
+        "search_product": {
+          "name": "search_product",
+          "columns": [
+            {
+              "expression": "(\n        setweight(to_tsvector('english', \"title\"), 'A') ||\n        setweight(to_tsvector('english', \"description\"), 'B')\n    )",
+              "asc": true,
+              "isExpression": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "gin",
+          "with": {}
+        }
+      },
       "foreignKeys": {
         "product_category_id_category_id_fk": {
           "name": "product_category_id_category_id_fk",
@@ -326,6 +385,19 @@
           "tableTo": "category",
           "columnsFrom": [
             "category_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "product_sub_category_id_sub_category_id_fk": {
+          "name": "product_sub_category_id_sub_category_id_fk",
+          "tableFrom": "product",
+          "tableTo": "sub_category",
+          "columnsFrom": [
+            "sub_category_id"
           ],
           "columnsTo": [
             "id"
@@ -345,39 +417,13 @@
           ],
           "onDelete": "no action",
           "onUpdate": "no action"
-        },
-        "product_size_attribute_product_attribute_id_fk": {
-          "name": "product_size_attribute_product_attribute_id_fk",
-          "tableFrom": "product",
-          "tableTo": "product_attribute",
-          "columnsFrom": [
-            "size_attribute"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "cascade"
-        },
-        "product_color_attribute_product_attribute_id_fk": {
-          "name": "product_color_attribute_product_attribute_id_fk",
-          "tableFrom": "product",
-          "tableTo": "product_attribute",
-          "columnsFrom": [
-            "color_attribute"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "cascade"
         }
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "public.product_sku": {
-      "name": "product_sku",
+    "public.product_insight": {
+      "name": "product_insight",
       "schema": "",
       "columns": {
         "id": {
@@ -440,9 +486,9 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "product_sku_product_id_product_id_fk": {
-          "name": "product_sku_product_id_product_id_fk",
-          "tableFrom": "product_sku",
+        "product_insight_product_id_product_id_fk": {
+          "name": "product_insight_product_id_product_id_fk",
+          "tableFrom": "product_insight",
           "tableTo": "product",
           "columnsFrom": [
             "product_id"
@@ -473,6 +519,12 @@
           "primaryKey": false,
           "notNull": true
         },
+        "slug": {
+          "name": "slug",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
         "description": {
           "name": "description",
           "type": "varchar",
@@ -483,13 +535,7 @@
           "name": "parent_id",
           "type": "varchar(63)",
           "primaryKey": false,
-          "notNull": false
-        },
-        "product_id": {
-          "name": "product_id",
-          "type": "varchar(63)",
-          "primaryKey": false,
-          "notNull": false
+          "notNull": true
         }
       },
       "indexes": {},
@@ -500,19 +546,6 @@
           "tableTo": "category",
           "columnsFrom": [
             "parent_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        },
-        "sub_category_product_id_product_id_fk": {
-          "name": "sub_category_product_id_product_id_fk",
-          "tableFrom": "sub_category",
-          "tableTo": "product",
-          "columnsFrom": [
-            "product_id"
           ],
           "columnsTo": [
             "id"

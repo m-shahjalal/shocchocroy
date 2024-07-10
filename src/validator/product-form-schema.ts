@@ -14,6 +14,7 @@ const productInsightSchema = createInsertSchema(productInsight, {
     others: z.string().optional(),
   }),
 }).pick({
+  id: true,
   notes: true,
   productCost: true,
   standardLevel: true,
@@ -26,6 +27,7 @@ export const productSchema = createInsertSchema(product)
     imageLinks: z.array(z.string()).min(1, 'Image is required'),
   })
   .pick({
+    id: true,
     title: true,
     description: true,
     categoryId: true,

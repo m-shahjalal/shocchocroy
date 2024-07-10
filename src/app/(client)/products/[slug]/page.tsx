@@ -1,16 +1,20 @@
-import { buildAPIUrl } from '@/utils/fetcher';
+import {
+  getProductById,
+  getRecommendedProduct,
+} from '@/server/action/product.action';
 
-import { ROUTES } from '@/config/routes';
 import ProductDetails from '@/components/product/details';
 
 const Page = async ({ params: { slug } }: { params: { slug: string } }) => {
-  const response = await fetch(buildAPIUrl(ROUTES.SINGLE_PRODUCT(slug)));
-  const product = await response.json();
+  const product: any = await getProductById(slug);
+  const recommended: any = await getRecommendedProduct();
 
-  const recommendRes = await fetch(buildAPIUrl(ROUTES.RECOMMENDED_PRODUCT));
-  const reProducts = await recommendRes.json();
-
-  return <ProductDetails details={product} recommended={reProducts} />;
+  return (
+    <ProductDetails
+      details={product.success && product.result!}
+      recommended={recommended.success && recommended.result!}
+    />
+  );
 };
 
 export default Page;

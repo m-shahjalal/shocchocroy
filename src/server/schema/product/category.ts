@@ -2,7 +2,7 @@ import { dbTableId } from '@/utils/db-utility';
 import { relations } from 'drizzle-orm';
 import { pgTable, timestamp, varchar } from 'drizzle-orm/pg-core';
 
-import { product } from './product';
+import { CompleteProduct, product } from './product';
 import {
   CompleteSubCategory,
   NewSubCategory,
@@ -11,8 +11,8 @@ import {
 
 export const category = pgTable('category', {
   id: dbTableId(),
-  name: varchar('name', { length: 255 }).notNull(),
-  slug: varchar('slug', { length: 255 }).notNull(),
+  name: varchar('name', { length: 255 }).notNull().unique(),
+  slug: varchar('slug', { length: 255 }).notNull().unique(),
   description: varchar('description'),
 
   createdAt: timestamp('created_at').notNull(),
@@ -22,7 +22,7 @@ export const category = pgTable('category', {
 
 export const categoryRelations = relations(category, ({ many }) => ({
   subCategories: many(subCategory),
-  product: many(product),
+  products: many(product),
 }));
 
 export type CategoryInsert = typeof category.$inferInsert;
@@ -30,5 +30,6 @@ export type CategorySelect = typeof category.$inferSelect;
 
 export type NewCategory = CategoryInsert & NewSubCategory;
 export type CompleteCategory = CategorySelect & {
-  subCategories: CompleteSubCategory[];
+  subCategories?: CompleteSubCategory[];
+  products?: CompleteProduct[];
 };
