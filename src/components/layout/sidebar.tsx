@@ -2,6 +2,7 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
+import { useParams } from 'next/navigation';
 import TangailIcon from '@/assets/icons/002-woman-1.png';
 import ThreePcsIcon from '@/assets/icons/003-saree.png';
 import MonipuriIcon from '@/assets/icons/006-saree-2.png';
@@ -162,7 +163,7 @@ const menuItems = [
 
 const SideBar = () => {
   const [{ isSidebarOpen }, setSidebar] = useAtom(sidebarAtom);
-
+  const params = useParams();
   const handleCloseSidebar = () => {
     setSidebar({ isSidebarOpen: false });
   };
@@ -180,7 +181,7 @@ const SideBar = () => {
         collapsible
         className="w-full"
       >
-        {menuItems.map(({ label, icon, subCategory, colorCode }) => (
+        {menuItems.map(({ label, icon, subCategory, colorCode, href }) => (
           <AccordionItem className="border-none" key={label} value={label}>
             <AccordionTrigger
               className={cn(
@@ -193,22 +194,30 @@ const SideBar = () => {
               </div>
             </AccordionTrigger>
             <AccordionContent>
-              {subCategory.map(({ href, label }) => (
-                <Link
-                  key={label}
-                  className="mx-2 block"
-                  href={href}
-                  prefetch={false}
-                >
-                  <div
-                    className={cn(
-                      'duration-600 my-2 w-full whitespace-pre rounded-md border border-l-8 border-gray-600 border-opacity-10 bg-gray-50 py-3 pl-4 transition-all hover:border-opacity-100'
-                    )}
+              {subCategory.map(({ href: subHref, label }) => {
+                const selected =
+                  params.category === href.replace('/', '') &&
+                  params['sub-category'] ===
+                    subHref.replace('/', '').split('/')[1];
+
+                return (
+                  <Link
+                    key={label}
+                    className="mx-2 block"
+                    href={subHref}
+                    prefetch={false}
+                    onClick={handleCloseSidebar}
                   >
-                    {label}
-                  </div>
-                </Link>
-              ))}
+                    <div
+                      className={cn(selected ? 'bg-gray-800 text-white' : 'bg-gray-50',
+                        'duration-600 my-2 w-full whitespace-pre rounded-md border border-l-8 border-gray-600 border-opacity-10  py-3 pl-4 transition-all hover:border-opacity-100'
+                      )}
+                    >
+                      {label}
+                    </div>
+                  </Link>
+                );
+              })}
             </AccordionContent>
           </AccordionItem>
         ))}
