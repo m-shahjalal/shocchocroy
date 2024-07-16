@@ -1,6 +1,6 @@
-import { ErrorResponse } from './server-action';
+import { ErrorResponse } from './fetch-formation';
 
-export const handleError = (
+export const handleAPIError = (
   error: { code?: number; message?: string } | unknown
 ): ErrorResponse => {
   if (

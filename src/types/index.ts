@@ -30,3 +30,18 @@ export interface FooterItem {
 export type MainNavItem = NavItemWithOptionalChildren;
 
 export type SidebarNavItem = NavItemWithChildren;
+
+
+export interface SuccessResponse<T> {
+  data: T;
+  error: null;
+  success: true;
+}
+
+export interface ErrorResponse {
+  data: null;
+  error: any;
+  success: false;
+}
+
+export type FetchFunction<T, P extends object> = (params?: P) => Promise<T>;

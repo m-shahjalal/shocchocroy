@@ -9,8 +9,10 @@ import { PAGES } from '@/config/pages';
 
 import { Button } from '../ui/button';
 import { Card, CardContent } from '../ui/card';
+import { useToast } from '../ui/use-toast';
 
 const SingleCard = ({ data }: { data: CompleteProduct }) => {
+  const { toast } = useToast();
   const router = useRouter();
   const setCartItem = useSetAtom(cartAtom);
 
@@ -29,6 +31,11 @@ const SingleCard = ({ data }: { data: CompleteProduct }) => {
         items: [...prevCart.items, { data, quantity: 1 }],
       };
     });
+    toast({
+      title: 'Great 🎉',
+      description: `Added ${data.title} to cart `,
+      variant: 'default',
+    });
   };
 
   return (
@@ -37,8 +44,8 @@ const SingleCard = ({ data }: { data: CompleteProduct }) => {
         <Image
           src={data.attachment?.link}
           onClick={() => router.push(PAGES.PRODUCT_DETAIL(data.id!))}
-          width={400}
-          height={400}
+          width={4000}
+          height={4000}
           alt="Product Image"
           className="aspect-square rounded-t-lg object-cover transition-opacity group-hover:opacity-50"
         />
@@ -59,32 +66,6 @@ const SingleCard = ({ data }: { data: CompleteProduct }) => {
       </CardContent>
     </Card>
   );
-
-  // return (
-  //   <Card key={data.id} className="flex flex-col">
-  //     <CardHeader>
-  //       <CardTitle>
-  //         <Link href={`${PAGES.PRODUCTS}/${data.id}`}>{data.title}</Link>
-  //       </CardTitle>
-  //     </CardHeader>
-
-  //     <CardContent
-  //       onClick={() => router.push(PAGES.PRODUCT_DETAIL(data.id!))}
-  //       className="flex flex-1 cursor-pointer flex-col items-center justify-center gap-2"
-  //     >
-  //       <Image
-  //         className="h-full w-full"
-  //         src={data.attachments?.[0].link}
-  //         width={200}
-  //         height={200}
-  //         alt="product"
-  //       />
-  //     </CardContent>
-  //     <CardFooter className="flex justify-between self-end">
-  //       <Button>Add To Cart</Button>
-  //     </CardFooter>
-  //   </Card>
-  // );
 };
 
 export default SingleCard;

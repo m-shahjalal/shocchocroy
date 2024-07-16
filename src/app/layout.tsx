@@ -4,6 +4,7 @@ import { cn } from '@/utils/cn';
 
 import './global.css';
 import NProgress from '@/components/loader/n-progress';
+import { Toaster } from '@/components/ui/toaster';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -23,6 +24,7 @@ export default async function RootLayout({
         <>
           {children}
           <NProgress />
+          <Toaster />
         </>
       </body>
     </html>

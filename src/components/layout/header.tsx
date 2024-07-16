@@ -41,7 +41,7 @@ export default function Header() {
   };
 
   return (
-    <header className="fixed left-0 right-0 z-10 h-16 bg-white shadow-sm">
+    <header className="fixed left-0 right-0 z-20 h-16 bg-white shadow-sm">
       <div className="container flex h-full items-center justify-between gap-4">
         <div className="flex flex-1 items-center justify-start gap-2">
           <span className="-top-[42px] left-7 z-30 cursor-pointer lg:hidden">

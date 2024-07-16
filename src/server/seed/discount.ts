@@ -7,7 +7,7 @@ export const seedDiscount = () => {
   for (let i = 0; i < 5; i++) {
     discounts.push({
       discountPercent: faker.helpers.rangeToNumber({ min: 4, max: 40 }),
-      name: `${faker.commerce.productAdjective()} saree offer.`,
+      name: `${faker.commerce.productAdjective()} offer.`,
       description: faker.commerce.productDescription(),
     });
   }

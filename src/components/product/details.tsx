@@ -24,7 +24,7 @@ export default function ProductDetails({
   recommended: CompleteProduct[];
 }) {
   const router = useRouter();
-  const [cartItem, setCartItem] = useAtom(cartAtom);
+  const [, setCartItem] = useAtom(cartAtom);
 
   const handleAddToCart = () => {
     setCartItem((prevCart) => {

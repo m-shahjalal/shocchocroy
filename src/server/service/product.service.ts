@@ -26,7 +26,13 @@ import {
 } from '../schema';
 
 export const Product = {
-  create: async (inputs: ProductSchemaType, user: User) => {
+  create: async ({
+    inputs,
+    user,
+  }: {
+    inputs: ProductSchemaType;
+    user: User;
+  }) => {
     // format data
     inputs.imageLinks = inputs.imageLinks.map((a: string) => getPublicURL(a));
     const data = productData(user!, inputs);
@@ -130,7 +136,7 @@ export const Product = {
 
   recommended: async () => {
     return (await db.query.product.findMany({
-      with: { attachments: true },
+      with: { attachment: true },
       limit: 6,
     })) as CompleteProduct[];
   },

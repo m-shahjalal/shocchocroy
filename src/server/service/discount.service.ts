@@ -48,12 +48,6 @@ export const Discount = {
       orderBy: desc(discount.discountPercent),
       limit: size,
       offset: (page - 1) * size,
-      with: {
-        attachments: true,
-        category: true,
-        discount: true,
-        subCategory: true,
-      },
     });
 
     return { data: data as CompleteDiscount[], count };

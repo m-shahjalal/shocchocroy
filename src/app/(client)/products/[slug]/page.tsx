@@ -2,19 +2,15 @@ import {
   getProductById,
   getRecommendedProduct,
 } from '@/server/action/product.action';
+import { saveFetch } from '@/utils/fetch-formation';
 
 import ProductDetails from '@/components/product/details';
 
 const Page = async ({ params: { slug } }: { params: { slug: string } }) => {
-  const product: any = await getProductById(slug);
-  const recommended: any = await getRecommendedProduct();
+  const product = await saveFetch(getProductById(slug));
+  const recommended = await saveFetch(getRecommendedProduct());
 
-  return (
-    <ProductDetails
-      details={product.success && product.result!}
-      recommended={recommended.success && recommended.result!}
-    />
-  );
+  return <ProductDetails details={product!} recommended={recommended!} />;
 };
 
 export default Page;

@@ -171,10 +171,11 @@ const SideBar = () => {
   return (
     <aside
       className={cn(
-        isSidebarOpen ? '-top-8 left-0' : '-left-full',
-        'fixed bottom-0 top-16 w-full flex-col rounded-t-md border border-transparent bg-background p-3 transition-all duration-700 lg:left-auto lg:top-20 lg:flex lg:w-72 lg:border-inherit'
+        isSidebarOpen ? '-top-8 left-0' : 'hidden',
+        'fixed lg:sticky bottom-0 right-32 top-16 z-10 w-full flex-col rounded-md border border-transparent bg-background p-3 transition-all duration-700 lg:left-auto lg:top-20 lg:flex lg:border-inherit h-[calc(100vh-64px)] overflow-y-auto'
       )}
     >
+      <div className='p-2 font-bold'>Category</div>
       <Accordion
         defaultValue={menuItems[0].label}
         type="single"
@@ -186,10 +187,10 @@ const SideBar = () => {
             <AccordionTrigger
               className={cn(
                 colorCode,
-                'mt-2 rounded-md border-t-0 px-2 no-underline transition-all duration-300 hover:no-underline'
+                'mt-2 w-full rounded-md border-t-0 px-2 no-underline transition-all duration-300 hover:no-underline'
               )}
             >
-              <div className="flex gap-1">
+              <div className="flex w-full gap-1">
                 {icon} {label}
               </div>
             </AccordionTrigger>
@@ -209,8 +210,9 @@ const SideBar = () => {
                     onClick={handleCloseSidebar}
                   >
                     <div
-                      className={cn(selected ? 'bg-gray-800 text-white' : 'bg-gray-50',
-                        'duration-600 my-2 w-full whitespace-pre rounded-md border border-l-8 border-gray-600 border-opacity-10  py-3 pl-4 transition-all hover:border-opacity-100'
+                      className={cn(
+                        selected ? 'bg-gray-800 text-white' : 'bg-gray-50',
+                        'duration-600 my-2 w-full whitespace-pre rounded-md border border-l-8 border-gray-600 border-opacity-10 py-3 pl-4 transition-all hover:border-opacity-100'
                       )}
                     >
                       {label}
